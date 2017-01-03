@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbFilingDataMapper">
+	<!-- [TB_FILING_DATA 项目归档配置表， 序列seq_filingdataid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbFilingData" id="TbFilingData">
+		<result property="filingDataId" column="FILINGDATAID" javaType="java.lang.Long" />
+		<result property="orgType" column="ORGTYPE" javaType="java.lang.Integer" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="comment" column="COMMENT" javaType="java.lang.String" />
+		<result property="filingDataName" column="FILINGDATANAME" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		FILINGDATAID,
+		ORGTYPE,
+		ORGANIZATIONID,
+		COMMENT,
+		FILINGDATANAME,
+		STATUS,
+		CREATEUSER,
+		CREATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbFilingData" parameterType="TbFilingData">
+		<selectKey keyProperty="filingDataId" resultType="long" order="BEFORE">
+			SELECT seq_filingdataid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_FILING_DATA (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{filingDataId, jdbcType=NUMERIC},
+			#{orgType, jdbcType=NUMERIC},
+			#{organizationId, jdbcType=NUMERIC},
+			#{comment, jdbcType=VARCHAR},
+			#{filingDataName, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbFilingDataByPage" resultMap="TbFilingData" parameterType="TbFilingData">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_FILING_DATA
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="filingDataId != null and filingDataId != '' ">AND FILINGDATAID = #{filingDataId}</if>
+			<if test="orgType != null and orgType != '' ">AND ORGTYPE = #{orgType}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

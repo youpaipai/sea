@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbInvitationSupplierMapper">
+	<!-- [TB_INVITATION_SUPPLIER 投标邀请书关系表] -->
+	<resultMap type="com.hzw.du.model.mapper.TbInvitationSupplier" id="TbInvitationSupplier">
+		<result property="standardId" column="STANDARDID" javaType="java.lang.Long" />
+		<result property="invitationId" column="INVITATIONID" javaType="java.lang.Long" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		STANDARDID,
+		INVITATIONID
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbInvitationSupplier" parameterType="TbInvitationSupplier">
+		INSERT INTO TB_INVITATION_SUPPLIER (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{standardId, jdbcType=NUMERIC},
+			#{invitationId, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryTbInvitationSupplierByPage" resultMap="TbInvitationSupplier" parameterType="TbInvitationSupplier">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_INVITATION_SUPPLIER
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="standardId != null and standardId != '' ">AND STANDARDID = #{standardId}</if>
+			<if test="invitationId != null and invitationId != '' ">AND INVITATIONID = #{invitationId}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysConfigMapper">
+	<!-- [SYS_CONFIG  系统配置项表， 序列seq_configid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysConfig" id="SysConfig">
+		<result property="configId" column="CONFIGID" javaType="java.lang.Long" />
+		<result property="configKey" column="configKey" javaType="java.lang.String" />
+		<result property="configValue" column="configValue" javaType="java.lang.String" />
+		<result property="configName" column="CONFIGNAME" javaType="java.lang.String" />
+		<result property="configNote" column="CONFIGNOTE" javaType="java.lang.String" />
+		<result property="dictId" column="DICTID" javaType="java.lang.Integer" />
+		<result property="showType" column="SHOWTYPE" javaType="java.lang.Integer" />
+		<result property="isLevel" column="ISLEVEL" javaType="java.lang.Integer" />
+		<result property="prompt" column="PROMPT" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		CONFIGID,
+		CONFIGKEY,
+		CONFIGVALUE,
+		CONFIGNAME,
+		CONFIGNOTE,
+		DICTID,
+		SHOWTYPE,
+		ISLEVEL,
+		PROMPT,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysConfig" parameterType="SysConfig">
+		<selectKey keyProperty="configId" resultType="long" order="BEFORE">
+			SELECT seq_configid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_CONFIG (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{configId, jdbcType=NUMERIC},
+			#{configKey, jdbcType=VARCHAR},
+			#{configValue, jdbcType=VARCHAR},
+			#{configName, jdbcType=VARCHAR},
+			#{configNote, jdbcType=VARCHAR},
+			#{dictId, jdbcType=NUMERIC},
+			#{showType, jdbcType=NUMERIC},
+			#{isLevel, jdbcType=NUMERIC},
+			#{prompt, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysConfigByPage" resultMap="SysConfig" parameterType="SysConfig">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_CONFIG
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="configId != null and configId != '' ">AND CONFIGID = #{configId}</if>
+			<if test="dictId != null and dictId != '' ">AND DICTID = #{dictId}</if>
+			<if test="showType != null and showType != '' ">AND SHOWTYPE = #{showType}</if>
+			<if test="isLevel != null and isLevel != '' ">AND ISLEVEL = #{isLevel}</if>
+			<if test="prompt != null and prompt != '' ">AND PROMPT = #{prompt}</if>
+			<if test="status != null">AND STATUS = #{status}</if>
+		</trim> 
+	</select>
+	
+</mapper>
+

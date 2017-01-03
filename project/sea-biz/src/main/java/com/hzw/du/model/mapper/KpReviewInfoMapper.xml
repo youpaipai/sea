@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpReviewInfoMapper">
+	<!-- [KP_REVIEW_INFO  详细评审明细表， 序列seq_infoid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpReviewInfo" id="KpReviewInfo">
+		<result property="infoId" column="INFOID" javaType="java.lang.Long" />
+		<result property="supplierId" column="SUPPLIERID" javaType="java.lang.Long" />
+		<result property="rulesId" column="RULESID" javaType="java.lang.Long" />
+		<result property="detailId" column="DETAILID" javaType="java.lang.Long"/>
+		<result property="score" column="SCORE" javaType="java.lang.Double"/>
+		<result property="isMarks" column="ISMARKS" javaType="java.lang.Integer"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		INFOID,
+		SUPPLIERID,
+		RULESID,
+		DETAILID,
+		SCORE,
+		ISMARKS,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpReviewInfo" parameterType="KpReviewInfo">
+		<selectKey keyProperty="infoId" resultType="long" order="BEFORE">
+			SELECT seq_infoid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_REVIEW_INFO (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{infoId, jdbcType=NUMERIC},
+			#{supplierId, jdbcType=NUMERIC},
+			#{rulesId, jdbcType=NUMERIC},
+			#{detailId, jdbcType=NUMERIC},
+			#{score, jdbcType=NUMERIC},
+			#{isMarks, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryKpReviewInfoByPage" resultMap="KpReviewInfo" parameterType="KpReviewInfo">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_REVIEW_INFO
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="infoId != null and infoId != '' ">AND INFOID = #{infoId}</if>
+			<if test="supplierId != null and supplierId != ''">AND SUPPLIERID = #{supplierId} </if>
+			<if test="rulesId != null and rulesId != ''">AND RULESID = #{rulesId} </if>
+			<if test="detailId != null and detailId != ''">AND DETAILID = #{detailId} </if>
+			<if test="score != null and score != ''">AND SCORE = #{score} </if>
+			<if test="isMarks != null and isMarks != ''">AND ISMARKS = #{isMarks} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

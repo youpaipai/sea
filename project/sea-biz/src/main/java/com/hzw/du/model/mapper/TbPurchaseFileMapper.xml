@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbPurchaseFileMapper">
+	<!-- [TB_PURCHASE_FILE 招标文件表， 序列seq_purchaseid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbPurchaseFile" id="TbPurchaseFile">
+		<result property="purchaseId" column="PURCHASEID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="fileId" column="FILEID" javaType="java.lang.Long" />
+		<result property="openMouldFileId" column="OPENMOULDFILEID" javaType="java.lang.Long" />
+		<result property="chargingUnit" column="CHARGINGUNIT" javaType="java.lang.String" />
+		<result property="chargingType" column="CHARGINGTYPE" javaType="java.lang.Integer" />
+		<result property="setFlag" column="SETFLAG" javaType="java.lang.Integer" />
+		<result property="fileCosts" column="FILECOSTS" javaType="java.math.BigDecimal" />
+		<result property="bidQualification" column="BIDQUALIFICATION" javaType="java.lang.String" />
+		<result property="validPeriod" column="VALIDPERIOD" javaType="java.lang.Integer" />
+		<result property="bidDocReferMethod" column="BIDDOCREFERMETHOD" javaType="java.lang.String" />
+		<result property="bailMoney" column="BAILMONEY" javaType="java.math.BigDecimal" />
+		<result property="currencyCode" column="CURRENCYCODE" javaType="java.lang.String" />
+		<result property="priceUnit" column="PRICEUNIT" javaType="java.lang.String" />
+		<result property="evaluatingMehtod" column="EVALUATINGMETHOD" javaType="java.lang.String" />
+		<result property="contact" column="CONTACT" javaType="java.lang.String" />
+		<result property="phone" column="PHONE" javaType="java.lang.String" />
+		<result property="saleEndTime" column="SALEENDTIME" javaType="java.util.Date" />
+		<result property="tenderTime" column="TENDERTIME" javaType="java.util.Date" />
+		<result property="submitEndTime" column="SUBMITENDTIME" javaType="java.util.Date" />
+		<result property="openAddress" column="OPENADDRESS" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		PURCHASEID,
+		SUBID,
+		TENDERPROJECTID,
+		FILEID,
+		OPENMOULDFILEID,
+		CHARGINGUNIT,
+		SETFLAG,
+		FILECOSTS,
+		BIDQUALIFICATION,
+		VALIDPERIOD,
+		BIDDOCREFERMETHOD,
+		BAILMONEY,
+		PRICEUNIT,
+		EVALUATINGMETHOD,
+		CONTACT,
+		PHONE,
+		TENDERTIME,
+		SUBMITENDTIME,
+		OPENADDRESS,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbPurchaseFile" parameterType="TbPurchaseFile">
+		<selectKey keyProperty="purchaseId" resultType="long" order="BEFORE">
+			SELECT seq_purchaseid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_PURCHASE_FILE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{purchaseId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{fileId, jdbcType=NUMERIC},
+			#{openMouldFileId, jdbcType=NUMERIC},
+			#{chargingUnit, jdbcType=VARCHAR},
+			#{chargingType, jdbcType=NUMERIC},
+			#{setFlag, jdbcType=NUMERIC},
+			#{fileCosts, jdbcType=NUMERIC},
+			#{bidQualification, jdbcType=VARCHAR},
+			#{validPeriod, jdbcType=NUMERIC},
+			#{bidDocReferMethod, jdbcType=VARCHAR},
+			#{bailMoney, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{evaluatingMehtod, jdbcType=VARCHAR},
+			#{contact, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{saleEndTime, jdbcType=TIMESTAMP},
+			#{tenderTime, jdbcType=TIMESTAMP},
+			#{submitEndTime, jdbcType=TIMESTAMP},
+			#{openAddress, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbPurchaseFileByPage" resultMap="TbPurchaseFile" parameterType="TbPurchaseFile">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_PURCHASE_FILE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="purchaseId != null and purchaseId != '' ">AND PURCHASEID = #{purchaseId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="fileId != null and fileId != '' ">AND FILEID = #{fileId}</if>
+			<if test="openMouldFileId != null and openMouldFileId != '' ">AND OPENMOULDFILEID = #{openMouldFileId}</if>
+			<if test="chargingUnit != null and chargingUnit != '' ">AND CHARGINGUNIT = #{chargingUnit}</if>
+			<if test="chargingType != null and chargingType != '' ">AND CHARGINGTYPE = #{chargingType}</if>
+			<if test="setFlag != null and setFlag != '' ">AND SETFLAG = #{setFlag}</if>
+			<if test="fileCosts != null and fileCosts != '' ">AND FILECOSTS = #{fileCosts}</if>
+			<if test="validPeriod != null and validPeriod != '' ">AND VALIDPERIOD = #{validPeriod}</if>
+			<if test="bidDocReferMethod != null and bidDocReferMethod != '' ">AND BIDDOCREFERMETHOD = #{bidDocReferMethod}</if>
+			<if test="bailMoney != null and bailMoney != '' ">AND BAILMONEY = #{bailMoney}</if>
+			<if test="currencyCode != null and currencyCode != '' ">AND CURRENCYCODE = #{currencyCode}</if>
+			<if test="priceUnit != null and priceUnit != '' ">AND PRICEUNIT = #{priceUnit}</if>
+			<if test="contact != null and contact != '' ">AND CONTACT = #{contact}</if>
+			<if test="phone != null and phone != '' ">AND PHONE = #{phone}</if>
+			<if test="openAddress != null and openAddress != '' ">AND OPENADDRESS = #{openAddress}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

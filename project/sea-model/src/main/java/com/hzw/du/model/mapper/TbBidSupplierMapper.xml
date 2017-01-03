@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbBidSupplierMapper">
+	<!-- [TB_BID_SUPPLIER 中标供应商， 序列seq_bidsupplierid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbBidSupplier" id="TbBidSupplier">
+		<result property="bidSupplierId" column="BIDSUPPLIERID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="standarId" column="STANDARDID" javaType="java.lang.Long" />
+		<result property="winBidPrice" column="WINBIDPRICE" javaType="java.math.BigDecimal" />
+		<result property="currencyCode" column="CURRENCYCODE" javaType="java.lang.String" />
+		<result property="priceUnit" column="PRICEUNIT" javaType="java.lang.String" />
+		<result property="otherExplanation" column="OTHEREXPLANATION" javaType="java.lang.String" />
+		<result property="bidFileId" column="BIDFILEID" javaType="java.lang.Long" />
+		<result property="bidStatus" column="BIDSTATUS" javaType="java.lang.Integer" />
+		<result property="contractFileId" column="CONTRACTFILEID" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		BIDSUPPLIERID,
+		SUBID,
+		TENDERPROJECTID,
+		STANDARDID,
+		WINBIDPRICE,
+		CURRENCYCODE,
+		PRICEUNIT,
+		OTHEREXPLANATION,
+		BIDFILEID,
+		BIDSTATUS,
+		CONTRACTFILEID,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbBidSupplier" parameterType="TbBidSupplier">
+		<selectKey keyProperty="bidSupplierId" resultType="long" order="BEFORE">
+			SELECT seq_bidsupplierid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_BID_SUPPLIER (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{bidSupplierId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{standarId, jdbcType=NUMERIC},
+			#{winBidPrice, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{otherExplanation, jdbcType=VARCHAR},
+			#{otherExplanation, jdbcType=NUMERIC},
+			#{bidStatus, jdbcType=NUMERIC},
+			#{contractFileId, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbBidSupplierByPage" resultMap="TbBidSupplier" parameterType="TbBidSupplier">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_BID_SUPPLIER
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="invitationId != null and invitationId != '' ">AND INVITATIONID = #{invitationId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="standarId != null and standarId != '' ">AND STANDARDID = #{standarId}</if>
+			<if test="winBidPrice != null and winBidPrice != '' ">AND WINBIDPRICE = #{winBidPrice}</if>
+			<if test="currencyCode != null and currencyCode != '' ">AND CURRENCYCODE = #{currencyCode}</if>
+			<if test="priceUnit != null and priceUnit != '' ">AND PRICEUNIT = #{priceUnit}</if>
+			<if test="bidFileId != null and bidFileId != '' ">AND BIDFILEID = #{bidFileId}</if>
+			<if test="bidStatus != null and bidStatus != '' ">AND BIDSTATUS = #{bidStatus}</if>
+			<if test="contractFileId != null and contractFileId != '' ">AND CONTRACTFILEID = #{contractFileId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

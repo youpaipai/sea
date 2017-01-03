@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpCastRecordMapper">
+	<!-- [KP_CAST_RECORD  投标记录表， 序列seq_castrecordid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpCastRecord" id="KpCastRecord">
+		<result property="castRecordId" column="CASTRECORDID" javaType="java.lang.Long"/>
+		<result property="subId" column="SUBID" javaType="java.lang.Long"/>
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="standardId" column="STANDARDID" javaType="java.lang.Long" />
+		<result property="castFileTime" column="CASTFILETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		CASTRECORDID,
+		SUBID,
+		TENDERPROJECTID,
+		STANDARDID,
+		CASTFILETIME,
+		STATUS,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpCastRecord" parameterType="KpCastRecord">
+		<selectKey keyProperty="castRecordId" resultType="long" order="BEFORE">
+			SELECT seq_castrecordid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_CAST_RECORD (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{castRecordId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{standardId, jdbcType=NUMERIC},
+			#{castFileTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryKpCastRecordByPage" resultMap="KpCastRecord" parameterType="KpCastRecord">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_CAST_RECORD
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="castRecordId != null and castRecordId != '' ">AND CASTRECORDID = #{castRecordId}</if>
+			<if test="subId != null and subId != ''">AND SUBID = #{subId} </if>
+			<if test="tenderProjectId != null and tenderProjectId != ''">AND TENDERPROJECTID = #{tenderProjectId} </if>
+			<if test="standardId != null and standardId != ''">AND STANDARDID = #{standardId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

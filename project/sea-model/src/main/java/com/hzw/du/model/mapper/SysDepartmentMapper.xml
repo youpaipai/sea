@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysDepartmentMapper">
+	<!-- [SYS_DEPARTMENT  部门表， 序列seq_departmentid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysDepartment" id="SysDepartment">
+		<result property="departmentId" column="DEPARTMENTID" javaType="java.lang.Long" />
+		<result property="departmentName" column="DEPARTMENTNAME" javaType="java.lang.String" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		DEPARTMENTID,
+		DEPARTMENTNAME,
+		ORGANIZATIONID,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysDepartment" parameterType="SysDepartment">
+		<selectKey keyProperty="departmentId" resultType="long" order="BEFORE">
+			SELECT seq_departmentid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_DEPARTMENT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{departmentId, jdbcType=NUMERIC},
+			#{departmentName, jdbcType=VARCHAR},
+			#{organizationId, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+			
+		)
+	</insert>
+	
+	<select id="querySysDepartmentByPage" resultMap="SysDepartment" parameterType="SysDepartment">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_DEPARTMENT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="departmentId != null and departmentId != '' ">AND DEPARTMENTID = #{departmentId}</if>
+			<if test="departmentName != null and departmentName != '' ">AND DEPARTMENTNAME = #{departmentName}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

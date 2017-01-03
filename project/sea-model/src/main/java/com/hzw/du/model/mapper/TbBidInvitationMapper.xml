@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbBidInvitationMapper">
+	<!-- [TB_BID_INVITATION 投标邀请书， 序列seq_invitationid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbBidInvitation" id="TbBidInvitation">
+		<result property="invitationId" column="INVITATIONID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="bidQualification" column="BIDQUALIFICATION" javaType="java.lang.String" />
+		<result property="purchaseFileGTime" column="PURCHASEFILEGTIME" javaType="java.util.Date" />
+		<result property="purchaseFileMethod" column="PURCHASEFILEMETHOD" javaType="java.lang.String" />
+		<result property="bidDocReferEndTime" column="BIDDOCREFERENDTIME" javaType="java.util.Date" />
+		<result property="BidDocReferMethod" column="BIDDOCREFERMETHOD" javaType="java.lang.String" />
+		<result property="bidInviteEndTime" column="BIDINVITEENDTIME" javaType="java.util.Date" />
+		<result property="bidInviteIssueTime" column="BIDINVITEISSUETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		INVITATIONID,
+		SUBID,
+		TENDERPROJECTID,
+		BIDQUALIFICATION,
+		PURCHASEFILEGTIME,
+		PURCHASEFILEMETHOD,
+		BIDDOCREFERENDTIME,
+		BIDDOCREFERMETHOD,
+		BIDINVITEENDTIME,
+		BIDINVITEISSUETIME,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbBidInvitation" parameterType="TbBidInvitation">
+		<selectKey keyProperty="invitationId" resultType="long" order="BEFORE">
+			SELECT seq_invitationid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_BID_INVITATION (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{invitationId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{bidQualification, jdbcType=VARCHAR},
+			#{purchaseFileGTime, jdbcType=TIMESTAMP},
+			#{purchaseFileMethod, jdbcType=VARCHAR},
+			#{bidDocReferEndTime, jdbcType=TIMESTAMP},
+			#{BidDocReferMethod, jdbcType=VARCHAR},
+			#{bidInviteEndTime, jdbcType=TIMESTAMP},
+			#{bidInviteIssueTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbBidInvitationByPage" resultMap="TbBidInvitation" parameterType="TbBidInvitation">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_BID_INVITATION
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="invitationId != null and invitationId != '' ">AND INVITATIONID = #{invitationId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

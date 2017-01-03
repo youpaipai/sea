@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpBidExpertMapper">
+	
+	<resultMap type="com.hzw.du.model.mapper.KpBidExpert" id="KpBidExpert">
+		<result property="bidExpertId" column="BIDEXPERTID" javaType="java.lang.Long" />
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="userName" column="USERNAME" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="notification" column="NOTIFICATION" />
+		<result property="notifyTime" column="NOTIFYTIME" javaType="java.util.Date"/>
+		<result property="examRecord" column="EXAMRECORD" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		BIDEXPERTID,
+		USERID,
+		USERNAME,
+		SUBID,
+		NOTIFICATION,
+		NOTIFYTIME,
+		EXAMRECORD,
+		CREATEUSER,
+		CREATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpBidExpert" parameterType="KpBidExpert">
+		<selectKey keyProperty="bidExpertId" resultType="long" order="BEFORE">
+			SELECT seq_bidexpertid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_BID_EXPERT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{bidExpertId, jdbcType=NUMERIC},
+			#{userId, jdbcType=NUMERIC},
+			#{userName, jdbcType=VARCHAR},
+			#{subId, jdbcType=NUMERIC},
+			#{notification, jdbcType=VARCHAR},
+			#{notifyTime, jdbcType=TIMESTAMP},
+			#{examRecord, jdbcType=VARCHAR},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryKpBidExpertByPage" resultMap="KpBidExpert" parameterType="KpBidExpert">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_BID_EXPERT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="bidExpertId != null and bidExpertId != '' ">AND BIDEXPERTID = #{bidExpertId}</if>
+			<if test="userId != null and userId != ''">AND USERID = #{userId} </if>
+			<if test="subId != null and subId != ''">AND SUBID = #{subId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpOpenProjectMapper">
+	<!-- [KP_OPEN_PROJECT  开标项目配置表， 序列seq_openid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpOpenProject" id="KpOpenProject">
+		<result property="openId" column="OPENID" javaType="java.lang.Long" />
+		<result property="subMeterId" column="SUBMETERID" javaType="java.lang.Long" />
+		<result property="reviewType" column="REVIEWTYPE" javaType="java.lang.Integer"/>
+		<result property="aggreGate" column="AGGREGATE" javaType="java.lang.Integer"/>
+		<result property="orderCalc" column="ORDERCALC" javaType="java.lang.Integer"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		OPENID,
+		SUBMETERID,
+		REVIEWTYPE,
+		AGGREGATE,
+		ORDERCALC,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpOpenProject" parameterType="KpOpenProject">
+		<selectKey keyProperty="openId" resultType="long" order="BEFORE">
+			SELECT seq_openid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_OPEN_PROJECT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{openId, jdbcType=NUMERIC},
+			#{subMeterId, jdbcType=NUMERIC},
+			#{reviewType, jdbcType=NUMERIC},
+			#{aggreGate, jdbcType=NUMERIC},
+			#{orderCalc, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryKpOpenProjectByPage" resultMap="KpOpenProject" parameterType="KpOpenProject">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_OPEN_PROJECT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="openId != null and openId != '' ">AND OPENID = #{openId}</if>
+			<if test="subMeterId != null and subMeterId != ''">AND subMeterId = #{subMeterId} </if>
+			<if test="reviewType != null and reviewType != ''">AND REVIEWTYPE = #{reviewType} </if>
+			<if test="aggreGate != null and aggreGate != ''">AND AGGREGATE = #{aggreGate} </if>
+			<if test="orderCalc != null and orderCalc != ''">AND ORDERCALC = #{orderCalc} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

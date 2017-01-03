@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbProjectFilingMapper">
+	<!-- [TB_PROJECT_FILING 项目归档表， 序列seq_filingid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbProjectFiling" id="TbProjectFiling">
+		<result property="filingId" column="FILINGID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="orgType" column="ORGTYPE" javaType="java.lang.Integer" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="filingDataId" column="FILINGDATAID" javaType="java.lang.Long" />
+		<result property="fileID" column="FILEID" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		FILINGID,
+		SUBID,
+		TENDERPROJECTID,
+		ORGTYPE,
+		ORGANIZATIONID,
+		FILINGDATAID,
+		FILEID,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbProjectFiling" parameterType="TbProjectFiling">
+		<selectKey keyProperty="filingId" resultType="long" order="BEFORE">
+			SELECT seq_filingid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_PROJECT_FILING (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{filingId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{orgType, jdbcType=NUMERIC},
+			#{organizationId, jdbcType=NUMERIC},
+			#{filingDataId, jdbcType=NUMERIC},
+			#{fileID, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbProjectFilingByPage" resultMap="TbProjectFiling" parameterType="TbProjectFiling">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_PROJECT_FILING
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="filingId != null and filingId != '' ">AND FILINGID = #{filingId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="orgType != null and orgType != '' ">AND ORGTYPE = #{orgType}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="filingDataId != null and filingDataId != '' ">AND FILINGDATAID = #{filingDataId}</if>
+			<if test="fileID != null and fileID != '' ">AND FILEID = #{fileID}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

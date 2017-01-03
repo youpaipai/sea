@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbAdvanceMapper">
+	<!-- [TB_ADVANCE 质疑投诉进度情况表， 序列seq_advanceid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbAdvance" id="TbAdvance">
+		<result property="advanceId" column="ADVANCEID" javaType="java.lang.Long" />
+		<result property="complainId" column="COMPLAINID" javaType="java.lang.Long" />
+		<result property="remark" column="REMARK" javaType="java.lang.String" />
+		<result property="fileId" column="FILEID" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		ADVANCEID,
+		COMPLAINID,
+		REMARK,
+		FILEID,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbAdvance" parameterType="TbAdvance">
+		<selectKey keyProperty="advanceId" resultType="long" order="BEFORE">
+			SELECT seq_advanceid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_ADVANCE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{advanceId, jdbcType=NUMERIC},
+			#{complainId, jdbcType=NUMERIC},
+			#{remark, jdbcType=VARCHAR},
+			#{fileId, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbAdvanceByPage" resultMap="TbAdvance" parameterType="TbAdvance">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_ADVANCE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="advanceId != null and advanceId != '' ">AND ABNORMALID = #{advanceId}</if>
+			<if test="complainId != null and complainId != '' ">AND COMPLAINID = #{complainId}</if>
+			<if test="fileId != null and fileId != '' ">AND FILEID = #{fileId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

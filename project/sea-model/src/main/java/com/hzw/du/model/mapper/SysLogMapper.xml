@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysLogMapper">
+	<!-- [SYS_LOG  日志信息表， 序列seq_logid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysLog" id="SysLog">
+		<result property="logId" column="LOGID" javaType="java.lang.Long" />
+		<result property="logType" column="LOGTYPE" javaType="java.lang.Integer" />
+		<result property="operatorId" column="OPERATORID" javaType="java.lang.Long" />
+		<result property="operator" column="OPERATOR" javaType="java.lang.String" />
+		<result property="roleId" column="ROLEID" javaType="java.lang.Long" />
+		<result property="roleName" column="ROLENAME" javaType="java.lang.String" />
+		<result property="ipAddr" column="IPADDR" javaType="java.lang.String" />
+		<result property="operateTime" column="OPERATETIME" javaType="java.util.Date" />
+		<result property="menuId" column="MENUID" javaType="java.lang.Long" />
+		<result property="menuName" column="MENUNAME" javaType="java.lang.String" />
+		<result property="buttonId" column="BUTTONID" javaType="java.lang.Long" />
+		<result property="buttonName" column="BUTTONNAME" javaType="java.lang.String" />
+		<result property="receiverId" column="RECEIVERID" javaType="java.lang.Long" />
+		<result property="receiverName" column="RECEIVERNAME" javaType="java.lang.String" />
+		<result property="operateNote" column="OPERATENOTE" javaType="java.lang.String" />
+		<result property="remark" column="REMARK" javaType="java.lang.String" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		LOGID,
+		LOGTYPE,
+		OPERATORID,
+		OPERATOR,
+		ROLEID,
+		ROLENAME,
+		IPADDR,
+		OPERATETIME,
+		MENUID,
+		MENUNAME,
+		BUTTONID,
+		BUTTONNAME,
+		RECEIVERID,
+		RECEIVERNAME,
+		OPERATENOTE,
+		REMARK,
+		CREATEUSER,
+		CREATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysLog" parameterType="SysLog">
+		<selectKey keyProperty="logId" resultType="long" order="BEFORE">
+			SELECT seq_logid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_LOG (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{logId, jdbcType=NUMERIC},
+			#{logType, jdbcType=NUMERIC},
+			#{operatorId, jdbcType=NUMERIC},
+			#{operator, jdbcType=VARCHAR},
+			#{roleId, jdbcType=NUMERIC},
+			#{roleName, jdbcType=VARCHAR},
+			#{ipAddr, jdbcType=VARCHAR},
+			#{operateTime, jdbcType=TIMESTAMP},
+			#{menuId, jdbcType=NUMERIC},
+			#{menuName, jdbcType=VARCHAR},
+			#{buttonId, jdbcType=NUMERIC},
+			#{buttonName, jdbcType=VARCHAR},
+			#{receiverId, jdbcType=NUMERIC},
+			#{receiverName, jdbcType=VARCHAR},
+			#{operateNote, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<!-- 日志信息列表（分页） -->
+	<select id="querySysLogByPage" resultMap="SysLog" parameterType="SysLog">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_LOG
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="logType != null">AND LOGTYPE = #{logType}</if>
+			<if test="operatorId != null and operatorId != '' ">AND OPERATORID = #{operatorId}</if>
+			<if test="operator != null and operator != '' ">AND OPERATOR = #{operator}</if>
+			<if test="roleId != null and roleId != '' ">AND DOWNPERSON = #{roleI}</if>
+			<if test="roleName != null and roleName != '' ">AND ROLENAME = #{roleName}</if>
+			<if test="ipAddr != null and ipAddr != '' ">AND IPADDR = #{ipAddr}</if>
+			<if test="menuId != null and menuId != '' ">AND MENUID = #{menuId}</if>
+			<if test="menuName != null and menuName != '' ">AND MENUNAME = #{menuName}</if>
+			<if test="buttonId != null and buttonId != '' ">AND BUTTONID = #{buttonId}</if>
+			<if test="buttonName != null and buttonName != '' ">AND BUTTONNAME = #{buttonName}</if>
+			<if test="receiverId != null and receiverId != '' ">AND RECEIVERID = #{receiverId}</if>
+			<if test="receiverName != null and receiverName != '' ">AND RECEIVERNAME = #{receiverName}</if>
+			<if test="createUser != null and createUser != '' ">AND CREATEUSER = #{createUser}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+			
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.operateTime_lt != null and conditonMap.operateTime_lt != ''">
+					and to_char(operateTime, 'yyyymmddhh24miss') &lt; #{conditonMap.operateTime_lt}
+				</if>
+				<if test="conditonMap.operateTime_lte != null and conditonMap.operateTime_lte != ''">
+					and to_char(operateTime, 'yyyymmddhh24miss') &lt;= #{conditonMap.operateTime_lte}
+				</if>
+				<if test="conditonMap.operateTime_gt != null and conditonMap.operateTime_gt != ''">
+					and to_char(operateTime, 'yyyymmddhh24miss') &gt; #{conditonMap.operateTime_gt}
+				</if>
+				<if test="conditonMap.operateTime_gte != null and conditonMap.operateTime_gte != ''">
+					and to_char(OPERATETIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.operateTime_gte}
+				</if>
+				<if test="conditonMap.operateTime_eq != null and conditonMap.operateTime_eq != ''">
+					and to_char(OPERATETIME, 'yyyymmddhh24miss') = #{conditonMap.operateTime_eq}
+				</if>
+			</if>
+		</trim>
+		ORDER BY CREATETIME DESC
+	</select>
+	
+	<!-- 根据主键ID获取日志信息 -->
+	<select id="getSysLogById" resultMap="SysLog" parameterType="java.lang.Long">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_LOG WHERE LOGID = #{logId}
+	</select>
+	
+</mapper>
+

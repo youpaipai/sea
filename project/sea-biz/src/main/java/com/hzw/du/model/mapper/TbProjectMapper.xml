@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbProjectMapper">
+	<!-- [TB_PROJECT 项目表， 序列seq_projectid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbProject" id="TbProject">
+		<result property="projectId" column="PROJECTID" javaType="java.lang.Long" />
+		<result property="projectNum" column="PROJECTNUM" javaType="java.lang.String" />
+		<result property="projectName" column="PROJECTNAME" javaType="java.lang.String" />
+		<result property="regionCode" column="REGIONCODE" javaType="java.lang.String" />
+		<result property="address" column="ADDRESS" javaType="java.lang.String" />
+		<result property="projectType" column="PROJECTTYPE" javaType="java.lang.String" />
+		<result property="fundingSource" column="FUNDINGSOURCE" javaType="java.lang.Integer" />
+		<result property="legalPerson" column="LEGALPERSON" javaType="java.lang.String" />
+		<result property="projectScale" column="PROJECTSCALE" javaType="java.lang.String" />
+		<result property="connector" column="CONNECTOR" javaType="java.lang.String" />
+		<result property="phone" column="PHONE" javaType="java.lang.String" />
+		<result property="approvalName" column="APPROVALNAME" javaType="java.lang.String" />
+		<result property="approvalNumber" column="APPROVALNUMBER" javaType="java.lang.String" />
+		<result property="approvalAuthority" column="APPROVALAUTHORITY" javaType="java.lang.String" />
+		<result property="projectManager" column="PROJECTMANAGER" javaType="java.lang.Long" />
+		<result property="purchaseType" column="PURCHASETYPE" javaType="java.lang.Integer" />
+		<result property="areaName" column="AREANAME" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		PROJECTID,
+		PROJECTNUM,
+		PROJECTNAME,
+		REGIONCODE,
+		ADDRESS,
+		PROJECTTYPE,
+		FUNDINGSOURCE,
+		LEGALPERSON,
+		PROJECTSCALE,
+		CONNECTOR,
+		PHONE,
+		APPROVALNAME,
+		APPROVALNUMBER,
+		APPROVALAUTHORITY,
+		PROJECTMANAGER,
+		PURCHASETYPE,
+		AREANAME,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<sql id="where_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="projectId != null and projectId != '' ">AND PROJECTID = #{projectId}</if>
+			<if test="projectNum != null and projectNum != '' ">AND PROJECTNUM = #{projectNum}</if>
+			<if test="projectName != null and projectName != '' ">AND PROJECTNAME = #{projectName}</if>
+			<if test="regionCode != null and regionCode != '' ">AND REGIONCODE = #{regionCode}</if>
+			<if test="projectType != null and projectType != '' ">AND PROJECTTYPE = #{projectType}</if>
+			<if test="fundingSource != null and fundingSource != '' ">AND FUNDINGSOURCE = #{fundingSource}</if>
+			<if test="legalPerson != null and legalPerson != '' ">AND LEGALPERSON = #{legalPerson}</if>
+			<if test="connector != null and connector != '' ">AND CONNECTOR = #{connector}</if>
+			<if test="phone != null and phone != '' ">AND PHONE = #{phone}</if>
+			<if test="approvalName != null and approvalName != '' ">AND APPROVALNAME = #{approvalName}</if>
+			<if test="approvalNumber != null and approvalNumber != '' ">AND APPROVALNUMBER = #{approvalNumber}</if>
+			<if test="approvalAuthority != null and approvalAuthority != '' ">AND APPROVALAUTHORITY = #{approvalAuthority}</if>
+			<if test="projectManager != null and projectManager != '' ">AND PROJECTMANAGER = #{projectManager}</if>
+			<if test="purchaseType != null and purchaseType != '' ">AND PURCHASETYPE = #{purchaseType}</if>
+			<if test="areaName != null and areaName != '' ">AND AREANAME = #{areaName}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+			<!-- 多余条件 -->
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.projectIdList != null and conditonMap.projectIdList.size() != 0">
+					and PROJECTID in
+					<foreach collection="conditonMap.projectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.projectNumList != null and conditonMap.projectNumList.size() != 0">
+					and PROJECTNUM in
+					<foreach collection="conditonMap.projectNumList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.projectNumLike != null and conditonMap.projectNumLike != ''">
+					and PROJECTNUM like '%${conditonMap.projectNumLike}%'
+				</if>
+				<if test="conditonMap.projectNameList != null and conditonMap.projectNameList.size() != 0">
+					and PROJECTNAME in
+					<foreach collection="conditonMap.projectNameList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.projectNameLike != null and conditonMap.projectNameLike != ''">
+					and PROJECTNAME like '%${conditonMap.projectNameLike}%'
+				</if>
+				<if test="conditonMap.regionCodeList != null and conditonMap.regionCodeList.size() != 0">
+					and REGIONCODE in
+					<foreach collection="conditonMap.regionCodeList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				
+				<if test="conditonMap.createTime_lt != null and conditonMap.createTime_lt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt; #{conditonMap.createTime_lt}
+				</if>
+				<if test="conditonMap.createTime_lte != null and conditonMap.createTime_lte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.createTime_lte}
+				</if>
+				<if test="conditonMap.createTime_gt != null and conditonMap.createTime_gt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt; #{conditonMap.createTime_gt}
+				</if>
+				<if test="conditonMap.createTime_gte != null and conditonMap.createTime_gte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.createTime_gte}
+				</if>
+				<if test="conditonMap.createTime_eq != null and conditonMap.createTime_eq != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') = #{conditonMap.startTime_eq}
+				</if>
+				
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbProject" parameterType="TbProject">
+		<selectKey keyProperty="projectId" resultType="long" order="BEFORE">
+			SELECT seq_projectid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_PROJECT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{projectId, jdbcType=NUMERIC},
+			#{projectNum, jdbcType=VARCHAR},
+			#{projectName, jdbcType=VARCHAR},
+			#{regionCode, jdbcType=VARCHAR},
+			#{address, jdbcType=VARCHAR},
+			#{projectType, jdbcType=VARCHAR},
+			#{fundingSource, jdbcType=NUMERIC},
+			#{legalPerson, jdbcType=VARCHAR},
+			#{projectScale, jdbcType=VARCHAR},
+			#{connector, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{approvalName, jdbcType=VARCHAR},
+			#{approvalNumber, jdbcType=VARCHAR},
+			#{approvalAuthority, jdbcType=VARCHAR},
+			#{projectManager, jdbcType=NUMERIC},
+			#{purchaseType, jdbcType=NUMERIC},
+			#{areaName, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbProjectByPage" resultMap="TbProject" parameterType="TbProject">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_PROJECT
+		<include refid="where_sql" />
+	</select>
+	
+</mapper>
+

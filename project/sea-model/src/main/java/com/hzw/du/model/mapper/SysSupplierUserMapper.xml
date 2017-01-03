@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysSupplierUserMapper">
+	<!-- [SYS_SUPPLIER_USER  供应商用户表， 序列seq_supplieruserid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysSupplierUser" id="SysSupplierUser">
+		<result property="supplierUserId" column="SUPPLIERUSERID" javaType="java.lang.Long" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="personFile" column="PERSONFILE" javaType="java.lang.Long" />
+		<result property="cardFile" column="CARDFILE" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		SUPPLIERUSERID,
+		ORGANIZATIONID,
+		USERID,
+		PERSONFILE,
+		CARDFILE,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysSupplierUser" parameterType="SysSupplierUser">
+		<selectKey keyProperty="supplierUserId" resultType="long" order="BEFORE">
+			SELECT seq_supplieruserid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_SUPPLIER_USER (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{supplierUserId, jdbcType=NUMERIC},
+			#{organizationId, jdbcType=NUMERIC},
+			#{userId, jdbcType=NUMERIC},
+			#{personFile, jdbcType=NUMERIC},
+			#{cardFile, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysSupplierUserByPage" resultMap="SysSupplierUser" parameterType="SysSupplierUser">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_SUPPLIER_USER
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="supplierUserId != null and supplierUserId != '' ">AND SUPPLIERUSERID = #{supplierUserId}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="userId != null and userId != '' ">AND USERID = #{userId}</if>
+			<if test="personFile != null and personFile != '' ">AND PERSONFILE = #{personFile}</if>
+			<if test="cardFile != null and cardFile != '' ">AND CARDFILE = #{cardFile}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+	<select id="getSysSupplierUserById" resultMap="SysSupplierUser" parameterType="java.lang.Long">
+		SELECT U.*, SF.FILENAME PERSONFILENAME, F.FILENAME CARDFILENAME FROM (
+			SELECT 
+				<include refid="table_sql" />
+			FROM SYS_SUPPLIER_USER
+			WHERE USERID = #{userId}) U
+		LEFT JOIN SYS_FILE SF ON U.PERSONFILE = SF.FILEID
+		LEFT JOIN SYS_FILE F ON U.CARDFILE = F.FILEID
+	</select>
+	
+	<!-- 修改用户信息 -->
+	<update id="modifySysSupplierUser" parameterType="SysSupplierUser" >
+		UPDATE SYS_SUPPLIER_USER
+		<set>
+			<if test="null != organizationId and '' != organizationId"> ORGANIZATIONID = #{organizationId},</if>
+			<if test="null != personFile and '' != personFile"> PERSONFILE = #{personFile },</if>
+			<if test="null != cardFile and '' != cardFile"> CARDFILE = #{cardFile },</if>
+			<if test="null != status and '' != status"> STATUS = #{status},</if>
+			<if test="null != updateUser and '' != updateUser"> UPDATEUSER = #{updateUser },</if>
+			<if test="null != updateTime"> UPDATETIME = #{updateTime },</if>
+		</set>
+		WHERE USERID = #{userId }
+	</update>
+	
+</mapper>
+

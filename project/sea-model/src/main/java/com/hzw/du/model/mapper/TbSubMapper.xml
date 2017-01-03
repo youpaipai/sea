@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbSubMapper">
+	<!-- [TB_SUB 标段表， 序列seq_subid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbSub" id="TbSub">
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="subName" column="SUBNAME" javaType="java.lang.String" />
+		<result property="subContent" column="SUBCONTENT" javaType="java.lang.String" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="tenderProejectNum" column="TENDERPROJECTNUM" javaType="java.lang.String" />
+		<result property="tenderProjectName" column="TENDERPROJECTNAME" javaType="java.lang.String" />
+		<result property="sortNo" column="SORTNO" javaType="java.lang.Long" />
+		<result property="bidQualification" column="BIDQUALIFICATION" javaType="java.lang.String" />
+		<result property="subProjectType" column="SUBPROJECTTYPE" javaType="java.lang.String" />
+		<result property="openTime" column="OPENTIME" javaType="java.util.Date"/>
+		<result property="openAddress" column="OPENADDRESS" javaType="java.lang.String"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		SUBID,
+		SUBNAME,
+		SUBCONTENT,
+		TENDERPROJECTID,
+		TENDERPROJECTNUM,
+		TENDERPROJECTNAME,
+		SORTNO,
+		BIDQUALIFICATION,
+		SUBPROJECTTYPE,
+		OPENTIME,
+		OPENADDRESS,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbSub" parameterType="TbSub">
+		<selectKey keyProperty="subId" resultType="long" order="BEFORE">
+			SELECT seq_subid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_SUB (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{subId, jdbcType=NUMERIC},
+			#{subName, jdbcType=VARCHAR},
+			#{SUBCONTENT, jdbcType=VARCHAR},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{tenderProejectNum, jdbcType=VARCHAR},
+			#{tenderProjectName, jdbcType=VARCHAR},
+			#{sortNo, jdbcType=NUMERIC},
+			#{bidQualification, jdbcType=VARCHAR},
+			#{subProjectType, jdbcType=VARCHAR},
+			#{openTime, jdbcType=TIMESTAMP},
+			#{openAddress, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbSubByPage" resultMap="TbSub" parameterType="TbSub">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_SUB
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="subName != null and subName != '' ">AND SUBNAME = #{subName}</if>
+			<if test="subContent != null and subContent != '' ">AND SUBCONTENT = #{subContent}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="tenderProejectNum != null and tenderProejectNum != '' ">AND TENDERPROJECTNUM = #{tenderProejectNum}</if>
+			<if test="tenderProjectName != null and tenderProjectName != '' ">AND TENDERPROJECTNAME = #{tenderProjectName}</if>
+			<if test="subProjectType != null and subProjectType != '' ">AND SUBPROJECTTYPE = #{subProjectType}</if>
+			<if test="sortNo != null and sortNo != '' ">AND SORTNO = #{sortNo}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysAgencyMapper">
+	<!-- [SYS_AGENCY  代理机构信息表， 序列seq_agencyid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysAgency" id="SysAgency">
+		<result property="agencyId" column="AGENCYID" javaType="java.lang.Long" />
+		<result property="webSite" column="WEBSITE" javaType="java.lang.String" />
+		<result property="description" column="DESCRIPTION" javaType="java.lang.String" />
+		<result property="businessRange" column="BUSINESSRANGE" javaType="java.lang.String" />
+		<result property="pinYinMa" column="PINYINMA" javaType="java.lang.String" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="qualiCategory" column="QUALICATEGORY" javaType="java.lang.String" />
+		<result property="qualiGrade" column="QUALIGRADE" javaType="java.lang.String" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		AGENCYID,
+		WEBSITE,
+		DESCRIPTION,
+		BUSINESSRANGE,
+		PINYINMA,
+		ORGANIZATIONID,
+		QUALICATEGORY,
+		QUALIGRADE,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysAgency" parameterType="SysAgency">
+		<selectKey keyProperty="agencyId" resultType="long" order="BEFORE">
+			SELECT seq_agencyid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_AGENCY (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{agencyId, jdbcType=NUMERIC},
+			#{webSite, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{businessRange, jdbcType=VARCHAR},
+			#{pinYinMa, jdbcType=VARCHAR},
+			#{organizationId, jdbcType=NUMERIC},
+			#{qualiCategory, jdbcType=VARCHAR},
+			#{qualiGrade, jdbcType=VARCHAR},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="querySysAgencyByPage" resultMap="SysAgency" parameterType="SysAgency">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_AGENCY
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="agencyId != null and agencyId != '' ">AND AGENCYID = #{agencyId}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="qualiCategory != null and qualiCategory != ''">AND QUALICATEGORY = #{qualiCategory} </if>
+			<if test="qualiGrade != null and qualiGrade != ''">AND QUALIGRADE = #{qualiGrade} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

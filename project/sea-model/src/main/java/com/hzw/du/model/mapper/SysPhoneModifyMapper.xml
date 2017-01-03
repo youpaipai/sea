@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysPhoneModifyMapper">
+	<!-- [SYS_PHONE_MODIFY  手机号码变更记录表， 序列seq_phonemodifyid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysPhoneModify" id="SysPhoneModify">
+		<result property="phoneModifyId" column="PHONEMODIFYID" javaType="java.lang.Long" />
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="userName" column="USERNAME" javaType="java.lang.String" />
+		<result property="oldPhone" column="OLDPHONE" javaType="java.lang.String" />
+		<result property="phone" column="PHONE" javaType="java.lang.String" />
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		PHONEMODIFYID,
+		USERID,
+		ORGANIZATIONID,
+		USERNAME,
+		OLDPHONE,
+		PHONE,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysPhoneModify" parameterType="SysPhoneModify">
+		<selectKey keyProperty="phoneModifyId" resultType="long" order="BEFORE">
+			SELECT seq_phonemodifyid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_PHONE_MODIFY (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{phoneModifyId, jdbcType=NUMERIC},
+			#{userId, jdbcType=NUMERIC},
+			#{organizationId, jdbcType=NUMERIC},
+			#{userName, jdbcType=VARCHAR},
+			#{oldPhone, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="querySysPhoneModifyByPage" resultMap="SysPhoneModify" parameterType="SysPhoneModify">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_PHONE_MODIFY
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="personUserId != null and personUserId != '' ">AND PERSONUSERID = #{personUserId}</if>
+			<if test="userId != null and userId != '' ">AND TOUSERID = #{userId}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="userName != null and userName != '' ">AND USERNAME = #{userName}</if>
+			<if test="oldPhone != null and oldPhone != '' ">AND OLDPHONE = #{oldPhone}</if>
+			<if test="phone != null and phone != '' ">AND PHONE = #{phone}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysButtonMapper">
+	<!-- [SYS_BUTTON  按钮初始表， 序列seq_buttonid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysButton" id="SysButton">
+		<result property="buttonId" column="BUTTONID" javaType="java.lang.Long" />
+		<result property="buttonName" column="BUTTONNAME" javaType="java.lang.String" />
+		<result property="url" column="URL" javaType="java.lang.String" />
+		<result property="functionName" column="FUNCTIONNAME" javaType="java.lang.String" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		BUTTONID,
+		BUTTONNAME,
+		URL,
+		FUNCTIONNAME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysButton" parameterType="SysButton">
+		<selectKey keyProperty="buttonId" resultType="long" order="BEFORE">
+			SELECT seq_buttonid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_BUTTON (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{buttonId, jdbcType=NUMERIC},
+			#{buttonName, jdbcType=VARCHAR},
+			#{url, jdbcType=VARCHAR},
+			#{functionName, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="querySysButtonByPage" resultMap="SysButton" parameterType="SysButton">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_BUTTON
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="buttonId != null and buttonId != '' ">AND BUTTONID = #{buttonId}</if>
+			<if test="functionName != null and functionName != '' ">AND FUNCTIONNAME = #{functionName}</if>
+		</trim> 
+	</select>
+	
+</mapper>
+

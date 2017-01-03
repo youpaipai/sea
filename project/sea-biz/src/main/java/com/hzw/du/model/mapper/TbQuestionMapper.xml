@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbQuestionMapper">
+	<!-- [TB_QUESTION 澄清答疑表， 序列seq_questionid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbQuestion" id="TbQuestion">
+		<result property="questionId" column="QUESTIONID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="problemSource" column="PROBLEMSOURCE" javaType="java.lang.String" />
+		<result property="questionFileId" column="QUESTIONFILEID" javaType="java.lang.Long" />
+		<result property="problemFileId" column="PROBLEMFILEID" javaType="java.lang.Long" />
+		<result property="questionNum" column="QUESTIONNUM" javaType="java.lang.Integer" />
+		<result property="answerFileId" column="ANSWERFILEID" javaType="java.lang.Long" />
+		<result property="cqFlag" column="CQFLAG" javaType="java.lang.Integer" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		QUESTIONID,
+		SUBID,
+		TENDERPROJECTID,
+		PROBLEMSOURCE,
+		QUESTIONFILEID,
+		PROBLEMFILEID,
+		QUESTIONNUM,
+		ANSWERFILEID,
+		CQFLAG,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbQuestion" parameterType="TbQuestion">
+		<selectKey keyProperty="questionId" resultType="long" order="BEFORE">
+			SELECT seq_questionid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_QUESTION (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{questionId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{problemSource, jdbcType=VARCHAR},
+			#{questionFileId, jdbcType=NUMERIC},
+			#{problemFileId, jdbcType=NUMERIC},
+			#{questionNum, jdbcType=NUMERIC},
+			#{answerFileId, jdbcType=NUMERIC},
+			#{cqFlag, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbQuestionByPage" resultMap="TbQuestion" parameterType="TbQuestion">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_QUESTION
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="questionId != null and questionId != '' ">AND QUESTIONID = #{questionId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="questionFileId != null and questionFileId != '' ">AND QUESTIONFILEID = #{questionFileId}</if>
+			<if test="problemFileId != null and problemFileId != '' ">AND PROBLEMFILEID = #{problemFileId}</if>
+			<if test="questionNum != null and questionNum != '' ">AND QUESTIONNUM = #{questionNum}</if>
+			<if test="answerFileId != null and answerFileId != '' ">AND ANSWERFILEID = #{answerFileId}</if>
+			<if test="cqFlag != null and cqFlag != '' ">AND CQFLAG = #{cqFlag}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

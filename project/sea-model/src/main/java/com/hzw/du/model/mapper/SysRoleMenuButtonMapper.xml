@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysRoleMenuButtonMapper">
+	<!-- [SYS_ROLE_MENU_BUTTON  角色菜单按钮权限表] -->
+	<resultMap type="com.hzw.du.model.mapper.SysRoleMenuButton" id="SysRoleMenuButton">
+		<result property="roleId" column="ROLEID" javaType="java.lang.Long" />
+		<result property="menuId" column="MENUID" javaType="java.lang.Long" />
+		<result property="buttonId" column="BUTTONID" javaType="java.lang.Long" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		ROLEID,
+		MENUID,
+		BUTTONID
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysRoleMenuButton" parameterType="SysRoleMenuButton">
+		INSERT INTO SYS_ROLE_MENU_BUTTON (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{roleId, jdbcType=NUMERIC},
+			#{menuId, jdbcType=NUMERIC},
+			#{buttonId, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="querySysRoleMenuButtonByPage" resultMap="SysRoleMenuButton" parameterType="SysRoleMenuButton">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_ROLE_MENU_BUTTON
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="roleId != null and roleId != '' ">AND ROLEID = #{roleId}</if>
+			<if test="menuId != null and menuId != '' ">AND MENUID = #{menuId}</if>
+			<if test="buttonId != null and buttonId != '' ">AND BUTTONID = #{buttonId}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

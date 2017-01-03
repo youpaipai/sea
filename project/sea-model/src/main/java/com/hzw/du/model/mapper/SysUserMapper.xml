@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysUserMapper">
+	<!-- [SYS_USER  用户表， 序列seq_userid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysUser" id="SysUser">
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="staffCode" column="STAFFCODE" javaType="java.lang.String" />
+		<result property="userName" column="USERNAME" javaType="java.lang.String" />
+		<result property="password" column="PASSWORD" javaType="java.lang.String" />
+		<result property="userType" column="USERTYPE" javaType="java.lang.Integer" />
+		<result property="departmentId" column="DEPARTMENTID" javaType="java.lang.Long" />
+		<result property="lastLoginTime" column="LASTLOGINTIME" javaType="java.util.Date" />
+		<result property="userClassify" column="USERCLASSIFY" javaType="java.lang.Integer" />
+		<result property="cardType" column="CARDTYPE" javaType="java.lang.String" />
+		<result property="cardNo" column="CARDNO" javaType="java.lang.String" />
+		<result property="roleId" column="ROLEID" javaType="java.lang.Long" />
+		<result property="count" column="COUNT" javaType="java.lang.Integer" />
+		<result property="errorDate" column="ERRORDATE" javaType="java.util.Date" />
+		<result property="phone" column="PHONE" javaType="java.lang.String" />
+		<result property="email" column="EMAIL" javaType="java.lang.String" />
+		<result property="telNo" column="TELNO" javaType="java.lang.String" />
+		<result property="gender" column="GENDER" javaType="java.lang.Integer" />
+		<result property="reginDate" column="REGINDATE" javaType="java.util.Date" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="auditStatus" column="AUDITSTATUS" javaType="java.lang.Integer" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		USERID,
+		STAFFCODE,
+		USERNAME,
+		PASSWORD,
+		USERTYPE,
+		DEPARTMENTID,
+		LASTLOGINTIME,
+		USERCLASSIFY,
+		CARDTYPE,
+		CARDNO,
+		ROLEID,
+		COUNT,
+		ERRORDATE,
+		PHONE,
+		EMAIL,
+		TELNO,
+		GENDER,
+		REGINDATE,
+		ORGANIZATIONID,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME, 
+		AUDITSTATUS
+	</sql>
+	
+	<sql id="where_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="userId != null and userId != '' ">AND USERID = #{userId}</if>
+			<if test="staffCode != null and staffCode != '' ">AND STAFFCODE = #{staffCode}</if>
+			<if test="null != password and '' != password" >AND PASSWORD = #{password}</if>
+			<if test="userName != null and userName != '' ">AND USERNAME = #{userName}</if>
+			<if test="userType != null and userType != '' ">AND USERTYPE = #{userType}</if>
+			<if test="departmentId != null and departmentId != '' ">AND DEPARTMENTID = #{departmentId}</if>
+			<if test="userClassify != null and userClassify != '' ">AND USERCLASSIFY = #{userClassify}</if>
+			<if test="cardType != null and cardType != '' ">AND CARDTYPE = #{cardType}</if>
+			<if test="cardNo != null and cardNo != '' ">AND CARDNO = #{cardNo}</if>
+			<if test="roleId != null and roleId != '' ">AND ROLEID = #{roleId}</if>
+			<if test="count != null and count != '' ">AND COUNT = #{count}</if>
+			<if test="phone != null and phone != '' ">AND PHONE = #{phone}</if>
+			<if test="email != null and email != '' ">AND EMAIL = #{email}</if>
+			<if test="telNo != null and telNo != '' ">AND TELNO = #{telNo}</if>
+			<if test="gender != null and gender != '' ">AND GENDER = #{gender}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="departmentId != null and departmentId != '' ">AND CARDFILE = #{departmentId}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+			<if test="null != auditStatus and '' != auditStatus"> AND AUDITSTATUS = #{auditStatus }</if>
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.phoeOrLoginName != null and conditonMap.phoeOrLoginName != ''">
+					and ( (staffCode = #{conditonMap.phoeOrLoginName} and phone != #{conditonMap.phoeOrLoginName}) 
+						or (staffCode != #{conditonMap.phoeOrLoginName} and phone = #{conditonMap.phoeOrLoginName})
+						) AND STATUS NOT IN (6,8)
+				</if>
+				<if test="conditonMap.userIdList != null and conditonMap.userIdList.size() != 0">
+					and USERID in
+					<foreach collection="conditonMap.userIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysUser" parameterType="SysUser">
+		<selectKey keyProperty="userId" resultType="long" order="BEFORE">
+			SELECT seq_userid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_USER (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{userId, jdbcType=NUMERIC},
+			#{staffCode, jdbcType=VARCHAR},
+			#{userName, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR},
+			#{userType, jdbcType=NUMERIC},
+			#{departmentId, jdbcType=NUMERIC},
+			#{lastLoginTime, jdbcType=TIMESTAMP},
+			#{userClassify, jdbcType=NUMERIC},
+			#{cardType, jdbcType=VARCHAR},
+			#{cardNo, jdbcType=VARCHAR},
+			#{roleId, jdbcType=NUMERIC},
+			#{count, jdbcType=NUMERIC},
+			#{errorDate, jdbcType=TIMESTAMP},
+			#{phone, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{telNo, jdbcType=VARCHAR},
+			#{gender, jdbcType=NUMERIC},
+			#{reginDate, jdbcType=TIMESTAMP},
+			#{organizationId, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{auditStatus, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<!-- 根据主键ID获取对象 -->
+	<select id="getSysUserById" resultMap="SysUser" parameterType="SysUser">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_USER
+		WHERE USERID = #{userId }
+	</select>
+	
+	<!-- 用户信息列表（分页） -->
+	<select id="querySysUserByPage" resultMap="SysUser" parameterType="SysUser">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_USER
+		<include refid="where_sql" />
+		ORDER BY CREATETIME DESC
+	</select>
+	
+	<!-- 根据登录号、手机号码验证是否唯一 -->
+	<select id="queryUserCount" parameterType="SysUser" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM SYS_USER
+		<include refid="where_sql" />
+	</select>
+	
+	<!-- 根据登陆名查询用户 -->
+	
+	<select id="getSysUserByLoginName" parameterType="SysUser" resultType="SysUser">
+		SELECT 
+			<include refid="table_sql" />
+		 FROM SYS_USER
+		<include refid="where_sql" />
+	</select>
+	
+	<!-- 用户信息以及组织机构列表（分页） -->
+	<select id="querySysUserAndOrgInfoByPage" resultMap="SysUser" parameterType="SysUser">
+		SELECT T.*, T1.ORGANIZATIONNAME FROM (
+			SELECT 
+				<include refid="table_sql" />
+			FROM SYS_USER
+			<include refid="where_sql" />
+		) T
+		LEFT JOIN SYS_ORGANIZATION T1
+		ON T1.ORGANIZATIONID = T.ORGANIZATIONID
+		
+	</select>
+	
+	<!-- 修改用户密码 -->
+	<update id="modifyPassword" parameterType="SysUser">
+		UPDATE SYS_USER SET PASSWORD = #{password }, UPDATEUSER = #{updateUser }, UPDATETIME = #{updateTime } WHERE USERID = #{userId }
+	</update>
+	
+	<!-- 修改用户状态（启用 停用 删除） -->
+	<update id="modifyUserStatus" parameterType="SysUser">
+		UPDATE SYS_USER SET STATUS = #{status }, UPDATEUSER = #{updateUser }, UPDATETIME = #{updateTime } 
+		WHERE USERID IN
+		<foreach collection="conditonMap.userIdList" item="uId" open="("  separator="," close=")">
+			#{uId }
+		</foreach>
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<update id="modifySysUser" parameterType="SysUser" >
+		UPDATE SYS_USER
+		<set>
+			<if test="staffCode != null and staffCode != '' ">AND STAFFCODE = #{staffCode},</if>
+			<if test="userName != null and userName != '' "> USERNAME = #{userName},</if>
+			<if test="null != password and '' != password" > PASSWORD = #{password},</if>
+			<if test="userType != null and userType != '' "> USERTYPE = #{userType},</if>
+			<if test="departmentId != null and departmentId != '' "> DEPARTMENTID = #{departmentId},</if>
+			<if test="null != lastLoginTime and '' != lastLoginTime"> LASTLOGINTIME = #{lastLoginTime },</if>
+			<if test="userClassify != null and userClassify != '' "> USERCLASSIFY = #{userClassify},</if>
+			<if test="cardType != null and cardType != '' "> CARDTYPE = #{cardType},</if>
+			<if test="cardNo != null and cardNo != '' "> CARDNO = #{cardNo},</if>
+			<if test="roleId != null and roleId != '' "> ROLEID = #{roleId},</if>
+			<if test="count != null and count != '' "> COUNT = #{count},</if>
+			<if test="null != errorDate and '' != errorDate"> ERRORDATE = #{errorDate },</if>
+			<if test="phone != null and phone != '' "> PHONE = #{phone},</if>
+			<if test="email != null and email != '' "> EMAIL = #{email},</if>
+			<if test="telNo != null and telNo != '' "> TELNO = #{telNo},</if>
+			<if test="gender != null and gender != '' "> GENDER = #{gender},</if>
+			<if test="organizationId != null and organizationId != '' "> ORGANIZATIONID = #{organizationId},</if>
+			<if test="departmentId != null and departmentId != '' "> CARDFILE = #{departmentId},</if>
+			<if test="status != null and status != '' "> STATUS = #{status},</if>
+			<if test="null != updateUser and '' != updateUser"> UPDATEUSER = #{updateUser },</if>
+			<if test="null != updateTime"> UPDATETIME = #{updateTime },</if>
+			<if test="null != auditStatus and '' != auditStatus"> AUDITSTATUS = #{auditStatus }</if>
+		</set>
+		WHERE USERID = #{userId }
+	</update>
+	
+	<!--更新 密码错误相关信息  -->
+	<update id="upDateSysUser" parameterType="SysUser">
+			UPDATE SYS_USER 
+			SET STATUS = #{status },
+				COUNT = #{count},
+				ERRORDATE=#{errorDate}
+			WHERE USERID = #{userId}
+		</update>
+</mapper>
+

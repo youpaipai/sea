@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysConstantMapper">
+	<!-- [SYS_CONSTANT  数据字典表， 序列seq_constantid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysConstant" id="SysConstant">
+		<result property="constantId" column="CONSTANTID" javaType="java.lang.Long" />
+		<result property="codeType" column="CODETYPE" javaType="java.lang.String" />
+		<result property="codeLevel" column="CODELEVEL" javaType="java.lang.Integer" />
+		<result property="codeName" column="CODENAME" javaType="java.lang.String" />
+		<result property="codeVal" column="CODEVAL" javaType="java.lang.String" />
+		<result property="parentId" column="PARENTID" javaType="java.lang.Long" />
+		<result property="orderFlag" column="ORDERFLAG" javaType="java.lang.Integer" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		CONSTANTID,
+		CODETYPE,
+		CODELEVEL,
+		CODENAME,
+		CODEVAL,
+		PARENTID,
+		ORDERFLAG,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysConstant" parameterType="SysConstant">
+		<selectKey keyProperty="constantId" resultType="long" order="BEFORE">
+			SELECT seq_constantid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_CONSTANT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{constantId, jdbcType=NUMERIC},
+			#{codeType, jdbcType=VARCHAR},
+			#{codeLevel, jdbcType=NUMERIC},
+			#{codeName, jdbcType=VARCHAR},
+			#{codeVal, jdbcType=VARCHAR},
+			#{parentId, jdbcType=NUMERIC},
+			#{orderFlag, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<!-- 更新数据字典信息 -->
+	<update id="modifySysConstant" parameterType="SysConstant">
+		UPDATE SYS_CONSTANT
+		<set>
+			<if test="null != codeType and '' != codeType"> CODETYPE = ${codeType},</if>
+			<if test="null != codeLevel and '' != codeLevel"> CODELEVEL = #{codeLevel },</if>
+			<if test="null != codeName and '' != codeName"> CODENAME = #{codeName },</if>
+			<if test="null != codeVal and '' != codeVal"> CODEVAL = #{codeVal },</if>
+			<if test="null != orderFlag and '' != orderFlag"> ORDERFLAG = #{orderFlag },</if>
+			<if test="null != status and '' != status"> STATUS = #{status },</if>
+			<if test="null != updateUser and '' != updateUser"> UPDATEUSER = #{updateUser },</if>
+			<if test="null != updateTime"> UPDATETIME = #{updateTime },</if>
+		</set>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="null != constantId and '' != constantId">AND CONSTANTID = #{constantId}</if>
+			<if test="null != parentId and '' != parentId"> AND PARENTID = #{parentId }</if>
+		</trim>
+	</update>
+	
+	<select id="querySysConstantByPage" resultMap="SysConstant" parameterType="SysConstant">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_CONSTANT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="codeType != null and codeType != '' ">AND CODETYPE = #{codeType}</if>
+			<if test="codeLevel != null and codeLevel != '' ">AND CODELEVEL = #{codeLevel}</if>
+			<if test="codeName != null and codeName != '' ">AND CODENAME = #{codeName}</if>
+			<if test="codeVal != null and codeVal != '' ">AND CODEVAL = #{codeVal}</if>
+			<if test="parentId != null and parentId != '' ">AND PARENTID = #{parentId}</if>
+			<if test="orderFlag != null and orderFlag != '' ">AND ORDERFLAG = #{orderFlag}</if>
+			<if test="null != status">AND STATUS = #{status}</if>
+			
+		</trim> 
+		 ORDER BY PARENTID, ORDERFLAG
+	</select>
+
+</mapper>
+

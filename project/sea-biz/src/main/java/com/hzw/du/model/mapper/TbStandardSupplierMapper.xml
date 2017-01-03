@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbStandardSupplierMapper">
+	<!-- [TB_STANDARD_SUPPLIER 参标供应商表， 序列seq_standardid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbStandardSupplier" id="TbStandardSupplier">
+		<result property="standardId" column="STANDARDID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="supplierOrgId" column="SUPPLIERORGID" javaType="java.lang.Long" />
+		<result property="supplierOrgName" column="SUPPLIERORGNAME" javaType="java.lang.String" />
+		<result property="supplierUserId" column="SUPPLIERUSERID" javaType="java.lang.Long" />
+		<result property="supplierUserName" column="SUPPLIERUSERNAME" javaType="java.lang.String" />
+		<result property="phone" column="PHONE" javaType="java.lang.String" />
+		<result property="isPayment" column="ISPAYMENT" javaType="java.lang.Integer" />
+		<result property="paymentType" column="PAYMENTTYPE" javaType="java.lang.Integer" />
+		<result property="ttFileId" column="TTFILEID" javaType="java.lang.Long" />
+		<result property="isInvite" column="ISINVITE" javaType="java.lang.Integer" />
+		<result property="isDownPower" column="ISDOWNPOWER" javaType="java.lang.Integer" />
+		<result property="isUnion" column="ISUNION" javaType="java.lang.Integer" />
+		<result property="unionCodeType" column="UNIONCODETYPE" javaType="java.lang.String" />
+		<result property="unionCode" column="UNIONCODE" javaType="java.lang.String" />
+		<result property="unionName" column="UNIONNAME" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		STANDARDID,
+		SUBID,
+		TENDERPROJECTID,
+		SUPPLIERORGID,
+		SUPPLIERORGNAME,
+		SUPPLIERUSERID,
+		SUPPLIERUSERNAME,
+		PHONE,
+		ISPAYMENT,
+		PAYMENTTYPE,
+		TTFILEID,
+		ISINVITE,
+		ISDOWNPOWER,
+		ISUNION,
+		UNIONCODETYPE,
+		UNIONCODE,
+		UNIONNAME,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<sql id="where_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="standardId != null and standardId != '' ">AND STANDARDID = #{standardId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="supplierOrgId != null and supplierOrgId != '' ">AND SUPPLIERORGID = #{supplierOrgId}</if>
+			<if test="supplierOrgName != null and supplierOrgName != '' ">AND SUPPLIERORGNAME = #{supplierOrgName}</if>
+			<if test="supplierUserId != null and supplierUserId != '' ">AND SUPPLIERUSERID = #{supplierUserId}</if>
+			<if test="supplierUserName != null and supplierUserName != '' ">AND SUPPLIERUSERNAME = #{supplierUserName}</if>
+			<if test="phone != null and phone != '' ">AND PHONE = #{phone}</if>
+			<if test="paymentType != null and paymentType != '' ">AND PAYMENTTYPE = #{paymentType}</if>
+			<if test="ttFileId != null and ttFileId != '' ">AND TTFILEID = #{ttFileId}</if>
+			<if test="isInvite != null and isInvite != '' ">AND ISINVITE = #{isInvite}</if>
+			<if test="isDownPower != null and isDownPower != '' ">AND ISDOWNPOWER = #{isDownPower}</if>
+			<if test="isUnion != null and isUnion != '' ">AND ISUNION = #{isUnion}</if>
+			<if test="unionCodeType != null and unionCodeType != '' ">AND UNIONCODETYPE = #{unionCodeType}</if>
+			<if test="unionCode != null and unionCode != '' ">AND UNIONCODE = #{unionCode}</if>
+			<if test="unionName != null and unionName != '' ">AND UNIONNAME = #{unionName}</if>
+			<if test="status != null">AND STATUS = #{status}</if>
+			<!-- 多余条件 -->
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.standardIdList != null and conditonMap.standardIdList.size() != 0">
+					and STANDARDID in
+					<foreach collection="conditonMap.standardIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectIdList != null and conditonMap.tenderProjectIdList.size() != 0">
+					and TENDERPROJECTID in
+					<foreach collection="conditonMap.tenderProjectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.supplierUserIdList != null and conditonMap.supplierUserIdList.size() != 0">
+					and SUPPLIERUSERID in
+					<foreach collection="conditonMap.supplierUserIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.subIdList != null and conditonMap.subIdList.size() != 0">
+					and SUBID in
+					<foreach collection="conditonMap.subIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.createTime_lt != null and conditonMap.createTime_lt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt; #{conditonMap.createTime_lt}
+				</if>
+				<if test="conditonMap.createTime_lte != null and conditonMap.createTime_lte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.createTime_lte}
+				</if>
+				<if test="conditonMap.createTime_gt != null and conditonMap.createTime_gt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt; #{conditonMap.createTime_gt}
+				</if>
+				<if test="conditonMap.createTime_gte != null and conditonMap.createTime_gte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.createTime_gte}
+				</if>
+				<if test="conditonMap.createTime_eq != null and conditonMap.createTime_eq != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') = #{conditonMap.createTime_eq}
+				</if>
+			</if>
+		</trim>
+	</sql>
+	<sql id="update_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<!-- 多余条件 -->
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.standardId != null and conditonMap.standardId != '' ">AND STANDARDID = #{conditonMap.standardId}</if>
+				<if test="conditonMap.subId != null and conditonMap.subId != '' ">AND SUBID = #{conditonMap.subId}</if>
+				<if test="conditonMap.tenderProjectId != null and conditonMap.tenderProjectId != '' ">AND TENDERPROJECTID = #{conditonMap.tenderProjectId}</if>
+				<if test="conditonMap.supplierOrgId != null and conditonMap.supplierOrgId != '' ">AND SUPPLIERORGID = #{conditonMap.supplierOrgId}</if>
+				<if test="conditonMap.supplierOrgName != null and conditonMap.supplierOrgName != '' ">AND SUPPLIERORGNAME = #{conditonMap.supplierOrgName}</if>
+				<if test="conditonMap.supplierUserId != null and conditonMap.supplierUserId != '' ">AND SUPPLIERUSERID = #{conditonMap.supplierUserId}</if>
+				<if test="conditonMap.supplierUserName != null and conditonMap.supplierUserName != '' ">AND SUPPLIERUSERNAME = #{conditonMap.supplierUserName}</if>
+				<if test="conditonMap.phone != null and conditonMap.phone != '' ">AND PHONE = #{conditonMap.phone}</if>
+				<if test="conditonMap.paymentType != null and conditonMap.paymentType != '' ">AND PAYMENTTYPE = #{conditonMap.paymentType}</if>
+				<if test="conditonMap.ttFileId != null and conditonMap.ttFileId != '' ">AND TTFILEID = #{conditonMap.ttFileId}</if>
+				<if test="conditonMap.isInvite != null and conditonMap.isInvite != '' ">AND ISINVITE = #{conditonMap.isInvite}</if>
+				<if test="conditonMap.isDownPower != null and conditonMap.isDownPower != '' ">AND ISDOWNPOWER = #{conditonMap.isDownPower}</if>
+				<if test="conditonMap.isUnion != null and conditonMap.isUnion != '' ">AND ISUNION = #{conditonMap.isUnion}</if>
+				<if test="conditonMap.unionCodeType != null and conditonMap.unionCodeType != '' ">AND UNIONCODETYPE = #{conditonMap.unionCodeType}</if>
+				<if test="conditonMap.unionCode != null and conditonMap.unionCode != '' ">AND UNIONCODE = #{conditonMap.unionCode}</if>
+				<if test="conditonMap.unionName != null and conditonMap.unionName != '' ">AND UNIONNAME = #{conditonMap.unionName}</if>
+				<if test="conditonMap.status != null and conditonMap.status != '' ">AND STATUS = #{conditonMap.status}</if>
+				<if test="conditonMap.standardIdList != null and conditonMap.standardIdList.size() != 0">
+					and STANDARDID in
+					<foreach collection="conditonMap.standardIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectIdList != null and conditonMap.tenderProjectIdList.size() != 0">
+					and TENDERPROJECTID in
+					<foreach collection="conditonMap.tenderProjectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.supplierUserIdList != null and conditonMap.supplierUserIdList.size() != 0">
+					and SUPPLIERUSERID in
+					<foreach collection="conditonMap.supplierUserIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.subIdList != null and conditonMap.subIdList.size() != 0">
+					and SUBID in
+					<foreach collection="conditonMap.subIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.createTime_lt != null and conditonMap.createTime_lt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt; #{conditonMap.createTime_lt}
+				</if>
+				<if test="conditonMap.createTime_lte != null and conditonMap.createTime_lte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.createTime_lte}
+				</if>
+				<if test="conditonMap.createTime_gt != null and conditonMap.createTime_gt != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt; #{conditonMap.createTime_gt}
+				</if>
+				<if test="conditonMap.createTime_gte != null and conditonMap.createTime_gte != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.createTime_gte}
+				</if>
+				<if test="conditonMap.createTime_eq != null and conditonMap.createTime_eq != ''">
+					and to_char(CREATETIME, 'yyyymmddhh24miss') = #{conditonMap.createTime_eq}
+				</if>
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbStandardSupplier" parameterType="TbStandardSupplier">
+		<selectKey keyProperty="standardId" resultType="long" order="BEFORE">
+			SELECT seq_standardid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_STANDARD_SUPPLIER (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{standardId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{supplierOrgId, jdbcType=NUMERIC},
+			#{supplierOrgName, jdbcType=VARCHAR},
+			#{supplierUserId, jdbcType=NUMERIC},
+			#{supplierUserName, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{isPayment, jdbcType=NUMERIC},
+			#{paymentType, jdbcType=NUMERIC},
+			#{ttFileId, jdbcType=NUMERIC},
+			#{isInvite, jdbcType=NUMERIC},
+			#{isDownPower, jdbcType=NUMERIC},
+			#{isUnion, jdbcType=NUMERIC},
+			#{unionCodeType, jdbcType=VARCHAR},
+			#{unionCode, jdbcType=VARCHAR},
+			#{unionName, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<insert id="insertTbStandardSupplierBatch" parameterType="TbStandardSupplier">
+		INSERT INTO TB_STANDARD_SUPPLIER (
+			<include refid="table_sql" />
+		)
+		SELECT T.* FROM (
+		<foreach collection="conditonMap.tbStandardSupplierList" item="item" separator="union all">
+			SELECT
+				#{item.standardId, jdbcType=NUMERIC},
+				#{item.subId, jdbcType=NUMERIC},
+				#{item.tenderProjectId, jdbcType=NUMERIC},
+				#{item.supplierOrgId, jdbcType=NUMERIC},
+				#{item.supplierOrgName, jdbcType=VARCHAR},
+				#{item.supplierUserId, jdbcType=NUMERIC},
+				#{item.supplierUserName, jdbcType=VARCHAR},
+				#{item.phone, jdbcType=VARCHAR},
+				#{item.isPayment, jdbcType=NUMERIC},
+				#{item.paymentType, jdbcType=NUMERIC},
+				#{item.ttFileId, jdbcType=NUMERIC},
+				#{item.isInvite, jdbcType=NUMERIC},
+				#{item.isDownPower, jdbcType=NUMERIC},
+				#{item.isUnion, jdbcType=NUMERIC},
+				#{item.unionCodeType, jdbcType=VARCHAR},
+				#{item.unionCode, jdbcType=VARCHAR},
+				#{item.unionName, jdbcType=VARCHAR},
+				#{item.status, jdbcType=NUMERIC},
+				#{item.createUser, jdbcType=NUMERIC},
+				#{item.createTime, jdbcType=TIMESTAMP},
+				#{item.updateUser, jdbcType=NUMERIC},
+				#{item.updateTime, jdbcType=TIMESTAMP}
+			FROM DUAL
+		 </foreach>
+		 ) T
+	</insert>
+	
+	<select id="queryTbStandardSupplierByPage" resultMap="TbStandardSupplier" parameterType="TbStandardSupplier">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_STANDARD_SUPPLIER
+		<include refid="where_sql" />
+	</select>
+	
+	<!-- 查询参标供应商项目信息，公共查询sql -->
+	<sql id="supplierProject_common">
+		SELECT 
+			T.*,
+			nvl(T2.BIDSTATUS, 0) as BIDSTATUS,
+			nvl(T3.ABNORMALFLAG, 0) as ABNORMALFLAG,
+			T4.SORTNO,
+			T4.SUBNAME,
+			T4.SUBCONTENT,
+			T4.OPENTIME,
+			T4.OPENADDRESS
+		FROM (
+			SELECT 
+				<include refid="table_sql" />
+			FROM TB_STANDARD_SUPPLIER
+			<include refid="where_sql" />
+		) T
+		<!-- 关联是否中标 -->
+		LEFT JOIN TB_BID_SUPPLIER T2
+			ON  T2.STANDARDID = T.STANDARDID 
+				AND T2.TENDERPROJECTID = T.TENDERPROJECTID 
+				AND T2.SUBID = T.SUBID
+				AND T2.STATUS = 0
+		<!-- 关联是否是异常 -->
+		LEFT JOIN TB_ABNORMAL_PROJECT T3
+			ON  T3.TENDERPROJECTID = T.TENDERPROJECTID 
+				AND T3.SUBID = T.SUBID
+				AND T3.STATUS = 0
+		LEFT JOIN TB_SUB T4
+			ON  T4.TENDERPROJECTID = T.TENDERPROJECTID 
+				AND T4.SUBID = T.SUBID
+				AND T4.STATUS = 0
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.bidStatus != null and conditonMap.bidStatus != ''">
+					AND nvl(T2.BIDSTATUS, 0) = #{conditonMap.bidStatus}
+				</if>
+				<if test="conditonMap.abnormalFlag != null and conditonMap.abnormalFlag != ''">
+					AND nvl(T3.ABNORMALFLAG, 0) = #{conditonMap.abnormalFlag}
+				</if>
+				
+				<if test="conditonMap.openTime_lt != null and conditonMap.openTime_lt != ''">
+					and to_char(T4.OPENTIME, 'yyyymmddhh24miss') &lt; #{conditonMap.openTime_lt}
+				</if>
+				<if test="conditonMap.openTime_lte != null and conditonMap.openTime_lte != ''">
+					and to_char(T4.OPENTIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.openTime_lte}
+				</if>
+				<if test="conditonMap.openTime_gt != null and conditonMap.openTime_gt != ''">
+					and to_char(T4.OPENTIME, 'yyyymmddhh24miss') &gt; #{conditonMap.openTime_gt}
+				</if>
+				<if test="conditonMap.openTime_gte != null and conditonMap.openTime_gte != ''">
+					and to_char(T4.OPENTIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.openTime_gte}
+				</if>
+				<if test="conditonMap.openTime_eq != null and conditonMap.openTime_eq != ''">
+					and to_char(T4.OPENTIME, 'yyyymmddhh24miss') = #{conditonMap.openTime_eq}
+				</if>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="querySupplierSubDetailByPage" resultMap="TbStandardSupplier" parameterType="TbStandardSupplier">
+		<include refid="supplierProject_common" />
+	</select>
+	
+	<select id="querySupplierProjectByPage" resultMap="TbStandardSupplier" parameterType="TbStandardSupplier">
+		SELECT * FROM (
+			SELECT
+				T1.TENDERPROJECTID,
+				T2.subNum,
+				T3.TENDERPROJECTNUM,
+				T3.PROJECTID,
+				T3.TENDERPROJECTNAME,
+				T3.TENDERCONTENT,
+				T3.STATUS
+			FROM (
+				SELECT T.TENDERPROJECTID FROM (
+					<include refid="supplierProject_common" />
+				) T
+				GROUP BY T.TENDERPROJECTID
+			) T1
+			<!-- 关联是否有标段 -->
+			LEFT JOIN (
+				SELECT count(TENDERPROJECTID) as subNum, TENDERPROJECTID
+				FROM TB_SUB
+				WHERE SORTNO IS NOT NULL AND SORTNO != 0
+				GROUP BY TENDERPROJECTID
+			)T2
+				ON T2.TENDERPROJECTID = T1.TENDERPROJECTID
+			<!-- 关联招标项目信息 -->
+			LEFT JOIN TB_TENDER_PROJECT T3
+				ON T3.TENDERPROJECTID = T1.TENDERPROJECTID
+		)	
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.tenderProjectNumList != null and conditonMap.tenderProjectNumList.size() != 0">
+					and TENDERPROJECTNUM in
+					<foreach collection="conditonMap.tenderProjectNumList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectNumLike != null and conditonMap.tenderProjectNumLike != ''">
+					and TENDERPROJECTNUM like '%${conditonMap.tenderProjectNumLike}%'
+				</if>
+				<if test="conditonMap.tenderProjectNameList != null and conditonMap.tenderProjectNameList.size() != 0">
+					and TENDERPROJECTNAME in
+					<foreach collection="conditonMap.tenderProjectNameList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectNameLike != null and conditonMap.tenderProjectNameLike != ''">
+					and TENDERPROJECTNAME like '%${conditonMap.tenderProjectNameLike}%'
+				</if>
+			</if>
+		</trim>	
+		
+	</select>
+	
+	<select id="queryNextSeqStandardId" resultType="java.lang.Long">
+		SELECT seq_standardid.NEXTVAL as STANDARDID FROM DUAL 
+	</select>
+	
+	<!-- 修改-->
+	<update id="updateTbStandardSupplier" parameterType="TbStandardSupplier">
+		UPDATE TB_STANDARD_SUPPLIER
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="subId != null and subId != '' ">, SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">, TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="supplierOrgId != null and supplierOrgId != '' ">, SUPPLIERORGID = #{supplierOrgId}</if>
+			<if test="supplierOrgName != null and supplierOrgName != '' ">, SUPPLIERORGNAME = #{supplierOrgName}</if>
+			<if test="supplierUserId != null and supplierUserId != '' ">, SUPPLIERUSERID = #{supplierUserId}</if>
+			<if test="supplierUserName != null and supplierUserName != '' ">, SUPPLIERUSERNAME = #{supplierUserName}</if>
+			<if test="phone != null and phone != '' ">, PHONE = #{phone}</if>
+			<if test="isPayment != null and isPayment != '' ">, ISPAYMENT = #{isPayment}</if>
+			<if test="paymentType != null and paymentType != '' ">, PAYMENTTYPE = #{paymentType}</if>
+			<if test="ttFileId != null and ttFileId != '' ">, TTFILEID = #{ttFileId}</if>
+			<if test="isInvite != null and isInvite != '' ">, ISINVITE = #{isInvite}</if>
+			<if test="isDownPower != null and isDownPower != '' ">, ISDOWNPOWER = #{isDownPower}</if>
+			<if test="isUnion != null and isUnion != '' ">, ISUNION = #{isUnion}</if>
+			<if test="unionCodeType != null and unionCodeType != '' ">, UNIONCODETYPE = #{unionCodeType}</if>
+			<if test="unionCode != null and unionCode != '' ">, UNIONCODE = #{unionCode}</if>
+			<if test="unionName != null and unionName != '' ">, UNIONNAME = #{unionName}</if>
+			<if test="status != null ">, STATUS = #{status}</if>
+			<if test="updateUser != null and updateUser != '' ">, UPDATEUSER = #{updateUser}</if>
+			<if test="updateTime != null and updateTime != '' ">, UPDATETIME = #{updateTime}</if>
+		</trim>
+		<include refid="update_sql" />
+	</update>
+	
+	
+</mapper>
+

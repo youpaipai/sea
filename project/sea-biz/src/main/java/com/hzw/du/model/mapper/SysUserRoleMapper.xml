@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysUserRoleMapper">
+	<!-- [SYS_USER_ROLE 用户与角色关系表] -->
+	<resultMap type="com.hzw.du.model.mapper.SysUserRole" id="SysUserRole">
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="roleId" column="ROLEID" javaType="java.lang.Long" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		USERID,
+		ROLEID
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysUserRole" parameterType="SysUserRole">
+		INSERT INTO SYS_USER_ROLE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{userId, jdbcType=NUMERIC},
+			#{roleId, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="querySysUserRoleByPage" resultMap="SysUserRole" parameterType="SysUserRole">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_USER_ROLE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="userId != null and userId != '' ">AND USERID = #{userId}</if>
+			<if test="roleId != null and roleId != '' ">AND ROLEID = #{roleId}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

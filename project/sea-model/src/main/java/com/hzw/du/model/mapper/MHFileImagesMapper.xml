@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.MHFileImagesMapper">
+	<!-- [MH_FILE_IMAGES  动态图片展示表， 序列seq_imageid] -->
+	<resultMap type="com.hzw.du.model.mapper.MHFileImages" id="MHFileImages">
+		<result property="imageId" column="IMAGEID" javaType="java.lang.Long" />
+		<result property="startTime" column="STARTTIME" javaType="java.util.Date" />
+		<result property="endTime" column="ENDTIME" javaType="java.util.Date" />
+		<result property="imageName" column="IMAGENAME" javaType="java.lang.String" />
+		<result property="hoverDesc" column="HOVERDESC" javaType="java.lang.String" />
+		<result property="remark" column="REMARK" javaType="java.lang.String" />
+		<result property="fileId" column="FILEID" javaType="java.lang.Long" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		IMAGEID,
+		STARTTIME,
+		ENDTIME,
+		IMAGENAME,
+		HOVERDESC,
+		REMARK,
+		FILEID,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertMHFileImages" parameterType="MHFileImages">
+		<selectKey keyProperty="imageId" resultType="long" order="BEFORE">
+			SELECT seq_imageid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO MH_FILE_IMAGES (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{imageId, jdbcType=NUMERIC},
+			#{startTime, jdbcType=TIMESTAMP},
+			#{endTime, jdbcType=TIMESTAMP},
+			#{imageName, jdbcType=VARCHAR},
+			#{hoverDesc, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+			#{fileId, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryMHFileImagesByPage" resultMap="MHFileImages" parameterType="MHFileImages">
+		SELECT 
+			<include refid="table_sql" />
+		FROM MH_FILE_IMAGES
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="imageId != null and imageId != '' ">AND IMAGEID = #{imageId}</if>
+			<if test="fileId != null and fileId != ''">AND FILEID = #{fileId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

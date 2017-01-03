@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysOrganizatioinMapper">
+	<!-- [SYS_ORGANIZATION  组织机构表， 序列seq_organizationid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysOrganizatioin" id="SysOrganizatioin">
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+		<result property="organizationName" column="ORGANIZATIONNAME" javaType="java.lang.String" />
+		<result property="type" column="TYPE" javaType="java.lang.Integer" />
+		<result property="areaId" column="AREAID" javaType="java.lang.String" />
+		<result property="province" column="PROVINCE" javaType="java.lang.String" />
+		<result property="city" column="CITY" javaType="java.lang.String" />
+		<result property="district" column="DISTRICT" javaType="java.lang.String" />
+		<result property="unitProperty" column="UNITPROPERTY" javaType="java.lang.String" />
+		<result property="licNumber" column="LICNUMBER" javaType="java.lang.String" />
+		<result property="licFileId" column="LICFILEID" javaType="java.lang.Long" />
+		<result property="orgCode" column="ORGCODE" javaType="java.lang.String" />
+		<result property="orgFileId" column="ORGFILEID" javaType="java.lang.Long" />
+		<result property="caCode" column="CACODE" javaType="java.lang.String" />
+		<result property="taxNumber" column="TAXNUMBER" javaType="java.lang.String" />
+		<result property="creditRating" column="CREDITRATING" javaType="java.lang.String" />
+		<result property="legalPerson" column="LEGALPERSON" javaType="java.lang.String" />
+		<result property="legalDocType" column="LEGALDOCTYPE" javaType="java.lang.String" />
+		<result property="legalIdNumber" column="LEGALIDNUMBER" javaType="java.lang.String" />
+		<result property="bankAccount" column="BANKACCOUNT" javaType="java.lang.String" />
+		<result property="account" column="ACCOUNT" javaType="java.lang.String" />
+		<result property="registeredCapital" column="REGISTEREDCAPITAL" javaType="java.math.BigDecimal" />
+		<result property="currencyCode" column="CURRENCYCODE" javaType="java.lang.String" />
+		<result property="priceUnit" column="PRICEUNIT" javaType="java.lang.String" />
+		<result property="telephone" column="TELEPHONE" javaType="java.lang.String" />
+		<result property="address" column="ADDRESS" javaType="java.lang.String" />
+		<result property="postCode" column="POSTCODE" javaType="java.lang.String" />
+		<result property="email" column="EMAIL" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		ORGANIZATIONID,
+		ORGANIZATIONNAME,
+		TYPE,
+		AREAID,
+		PROVINCE,
+		CITY,
+		DISTRICT,
+		UNITPROPERTY,
+		LICNUMBER,
+		LICFILEID,
+		ORGCODE,
+		ORGFILEID,
+		CACODE,
+		CREDITRATING,
+		LEGALPERSON,
+		LEGALDOCTYPE,
+		LEGALIDNUMBER,
+		BANKACCOUNT,
+		ACCOUNT,
+		REGISTEREDCAPITAL,
+		CURRENCYCODE,
+		PRICEUNIT,
+		TELEPHONE,
+		ADDRESS,
+		POSTCODE,
+		EMAIL,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysOrganizatioin" parameterType="SysOrganizatioin">
+		<selectKey keyProperty="organizationId" resultType="long" order="BEFORE">
+			SELECT seq_organizationid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_ORGANIZATION (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{organizationId, jdbcType=NUMERIC},
+			#{organizationName, jdbcType=VARCHAR},
+			#{type, jdbcType=NUMERIC},
+			#{areaId, jdbcType=VARCHAR},
+			#{province, jdbcType=VARCHAR},
+			#{city, jdbcType=VARCHAR},
+			#{district, jdbcType=VARCHAR},
+			#{unitProperty, jdbcType=VARCHAR},
+			#{licNumber, jdbcType=VARCHAR},
+			#{licFileId, jdbcType=NUMERIC},
+			#{orgCode, jdbcType=VARCHAR},
+			#{orgFileId, jdbcType=NUMERIC},
+			#{caCode, jdbcType=VARCHAR},
+			#{taxNumber, jdbcType=VARCHAR},
+			#{creditRating, jdbcType=VARCHAR},
+			#{legalPerson, jdbcType=VARCHAR},
+			#{legalDocType, jdbcType=VARCHAR},
+			#{legalIdNumber, jdbcType=VARCHAR},
+			#{bankAccount, jdbcType=VARCHAR},
+			#{account, jdbcType=VARCHAR},
+			#{registeredCapital, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{telephone, jdbcType=VARCHAR},
+			#{address, jdbcType=VARCHAR},
+			#{postCode, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysOrganizatioinByPage" resultMap="SysOrganizatioin" parameterType="SysOrganizatioin">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_ORGANIZATION
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+			<if test="organizationName != null and organizationName != '' ">AND ORGANIZATIONNAME = #{organizationName}</if>
+			<if test="type != null and type != '' ">AND TYPE = #{type}</if>
+			<if test="areaId != null and areaId != '' ">AND AREAID = #{areaId}</if>
+			<if test="province != null and province != '' ">AND PROVINCE = #{province}</if>
+			<if test="city != null and city != '' ">AND CITY = #{city}</if>
+			<if test="district != null and district != '' ">AND DISTRICT = #{district}</if>
+			<if test="unitProperty != null and unitProperty != '' ">AND UNITPROPERTY = #{unitProperty}</if>
+			<if test="licNumber != null and licNumber != '' ">AND LICNUMBER = #{licNumber}</if>
+			<if test="licFileId != null and licFileId != '' ">AND LICFILEID = #{licFileId}</if>
+			<if test="orgCode != null and orgCode != '' ">AND ORGCODE = #{orgCode}</if>
+			<if test="orgFileId != null and orgFileId != '' ">AND ORGFILEID = #{orgFileId}</if>
+			<if test="caCode != null and caCode != '' ">AND CACODE = #{caCode}</if>
+			<if test="taxNumber != null and taxNumber != '' ">AND TAXNUMBER = #{taxNumber}</if>
+			<if test="creditRating != null and creditRating != '' ">AND CREDITRATING = #{creditRating}</if>
+			<if test="legalPerson != null and legalPerson != '' ">AND LEGALPERSON = #{legalPerson}</if>
+			<if test="legalDocType != null and legalDocType != '' ">AND LEGALDOCTYPE = #{legalDocType}</if>
+			<if test="legalIdNumber != null and legalIdNumber != '' ">AND LEGALIDNUMBER = #{legalIdNumber}</if>
+			<if test="bankAccount != null and bankAccount != '' ">AND BANKACCOUNT = #{bankAccount}</if>
+			<if test="account != null and account != '' ">AND ACCOUNT = #{account}</if>
+			<if test="registeredCapital != null and registeredCapital != '' ">AND REGISTEREDCAPITAL = #{registeredCapital}</if>
+			<if test="currencyCode != null and currencyCode != '' ">AND CURRENCYCODE = #{currencyCode}</if>
+			<if test="priceUnit != null and priceUnit != '' ">AND PRICEUNIT = #{priceUnit}</if>
+			<if test="telephone != null and telephone != '' ">AND TELEPHONE = #{telephone}</if>
+			<if test="postCode != null and postCode != '' ">AND POSTCODE = #{postCode}</if>
+			<if test="email != null and email != '' ">AND EMAIL = #{email}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+	<!-- 更新组织机构信息-->
+	<update id="updateSysOrganizatioin" parameterType="SysOrganizatioin" >
+		UPDATE SYS_ORGANIZATION
+		<set>
+			<if test="organizationName != null  organizationName != '' "> ORGANIZATIONNAME = #{organizationName},</if>
+			<if test="type != null  type != '' "> TYPE = #{type} ,</if>
+			<if test="areaId != null  areaId != '' "> AREAID = #{areaId} ,</if>
+			<if test="province != null  province != '' "> PROVINCE = #{province} ,</if>
+			<if test="city != null  city != '' "> CITY = #{city} ,</if>
+			<if test="district != null  district != '' "> DISTRICT = #{district} ,</if>
+			<if test="unitProperty != null  unitProperty != '' "> UNITPROPERTY = #{unitProperty} ,</if>
+			<if test="licNumber != null  licNumber != '' "> LICNUMBER = #{licNumber} ,</if>
+			<if test="licFileId != null  licFileId != '' "> LICFILEID = #{licFileId} ,</if>
+			<if test="orgCode != null  orgCode != '' "> ORGCODE = #{orgCode} ,</if>
+			<if test="orgFileId != null  orgFileId != '' "> ORGFILEID = #{orgFileId} ,</if>
+			<if test="caCode != null  caCode != '' "> CACODE = #{caCode} ,</if>
+			<if test="taxNumber != null  taxNumber != '' "> TAXNUMBER = #{taxNumber} ,</if>
+			<if test="creditRating != null  creditRating != '' "> CREDITRATING = #{creditRating} ,</if>
+			<if test="legalPerson != null  legalPerson != '' "> LEGALPERSON = #{legalPerson} ,</if>
+			<if test="legalDocType != null  legalDocType != '' "> LEGALDOCTYPE = #{legalDocType} ,</if>
+			<if test="legalIdNumber != null  legalIdNumber != '' "> LEGALIDNUMBER = #{legalIdNumber} ,</if>
+			<if test="bankAccount != null  bankAccount != '' "> BANKACCOUNT = #{bankAccount}</if>
+			<if test="account != null  account != '' "> ACCOUNT = #{account}</if>
+			<if test="registeredCapital != null  registeredCapital != '' "> REGISTEREDCAPITAL = #{registeredCapital} ,</if>
+			<if test="currencyCode != null  currencyCode != '' "> CURRENCYCODE = #{currencyCode} ,</if>
+			<if test="priceUnit != null  priceUnit != '' "> PRICEUNIT = #{priceUnit} ,</if>
+			<if test="telephone != null  telephone != '' "> TELEPHONE = #{telephone} ,</if>
+			<if test="postCode != null  postCode != '' "> POSTCODE = #{postCode} ,</if>
+			<if test="email != null  email != '' "> EMAIL = #{email} ,</if>
+			<if test="null != updateUser and '' != updateUser"> UPDATEUSER = #{updateUser }, </if>
+			<if test="null != updateTime" > UPDATETIME = #{updateTime }, </if>
+			<if test="status != null and status != '' "> STATUS = #{status} ,</if>
+		</set>
+		WHERE ORGANIZATIONID = #{organizationId}
+	</update>
+	
+	<!-- 查询组织机构个数 -->
+	<select id="getOrgCount" parameterType="SysOrganizatioin" resultType="java.lang.Integer" >
+		SELECT COUNT(1) FROM SYS_ORGANIZATION
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="type != null and type != '' ">AND TYPE = #{type}</if>
+			<if test="status != null and status != '' ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+</mapper>
+

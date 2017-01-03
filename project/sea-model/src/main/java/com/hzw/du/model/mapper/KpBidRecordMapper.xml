@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpBidRecordMapper">
+	
+	<resultMap type="com.hzw.du.model.mapper.KpBidRecord" id="KpBidRecord">
+		<result property="recordId" column="RECORDID" javaType="java.lang.Long"/>
+		<result property="subId" column="SUBID" javaType="java.lang.Long"/>
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long"/>
+		<result property="standardId" column="STANDARDID" javaType="java.lang.Long"/>
+		<result property="tenderFileId" column="TENDERFILEID" javaType="java.lang.Long"/>
+		<result property="openFileId" column="OPENFILEID" javaType="java.lang.Long"/>
+		<result property="price" column="PRICE" javaType="java.math.BigDecimal"/>
+		<result property="duration" column="DURATION" javaType="java.lang.Integer"/>
+		<result property="currencyCode" column="CURRENCYCODE" />
+		<result property="priceUnit" column="PRICEUNIT" />
+		<result property="initreviewStatus" column="INITREVIEWSTATUS" javaType="java.lang.Integer"/>
+		<result property="bidFileStatus" column="BIDFILESTATUS" javaType="java.lang.Integer"/>
+		<result property="score" column="SCORE" javaType="java.lang.Double"/>
+		<result property="bidOpeningActor" column="BIDOPENINGACTOR" />
+		<result property="bidOpeningTime" column="BIDOPENINGTIME" javaType="java.util.Date"/>
+		<result property="bidOpeningContend" column="BIDOPENINGCONTENT" />
+		<result property="bidOpeningAddress" column="BIDOPENINGADDRESS" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		RECORDID,
+		SUBID,
+		TENDERPROJECTID,
+		STANDARDID,
+		TENDERFILEID,
+		OPENFILEID,
+		PRICE,
+		DURATION,
+		CURRENCYCODE,
+		PRICEUNIT,
+		INITREVIEWSTATUS,
+		BIDFILESTATUS,
+		SCORE,
+		BIDOPENINGACTOR,
+		BIDOPENINGTIME,
+		BIDOPENINGCONTENT,
+		BIDOPENINGADDRESS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpBidRecord" parameterType="KpBidRecord">
+		<selectKey keyProperty="recordId" resultType="long" order="BEFORE">
+			SELECT seq_recordid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_BID_RECORD (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{recordId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{standardId, jdbcType=NUMERIC},
+			#{tenderFileId, jdbcType=NUMERIC},
+			#{openFileId, jdbcType=NUMERIC},
+			#{price, jdbcType=NUMERIC},
+			#{duration, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{initreviewStatus, jdbcType=NUMERIC},
+			#{bidFileStatus, jdbcType=NUMERIC},
+			#{score, jdbcType=NUMERIC},
+			#{bidOpeningActor, jdbcType=VARCHAR},
+			#{bidOpeningTime, jdbcType=TIMESTAMP},
+			#{bidOpeningContend, jdbcType=VARCHAR},
+			#{bidOpeningAddress, jdbcType=VARCHAR},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryKpBidRecordByPage" resultMap="KpBidRecord" parameterType="KpBidRecord">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_BID_RECORD
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="recordId != null and recordId != '' ">AND RECORDID = #{recordId}</if>
+			<if test="subId != null and subId != ''">AND SUBID = #{subId} </if>
+			<if test="tenderProjectId != null and tenderProjectId != ''">AND TENDERPROJECTID = #{tenderProjectId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

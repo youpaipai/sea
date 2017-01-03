@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpProjectRulesMapper">
+	<!-- [KP_PROJECT_RULES  项目评标规则表， 序列seq_rulesid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpProjectRules" id="KpProjectRules">
+		<result property="rulesId" column="RULESID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="rulesName" column="RULESNAME" javaType="java.lang.String" />
+		<result property="parentId" column="PARENTID" javaType="java.lang.Long"/>
+		<result property="score" column="SCORE" javaType="java.lang.Double"/>
+		<result property="sortNo" column="SORTNO" javaType="java.lang.Integer"/>
+		<result property="remark" column="REMARK" javaType="java.lang.String"/>
+		<result property="isScore" column="ISSCORE" javaType="java.lang.Integer"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		RULESID,
+		SUBID,
+		RULESNAME,
+		PARENTID,
+		SCORE,
+		SORTNO,
+		REMARK,
+		ISSCORE,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpProjectRules" parameterType="KpProjectRules">
+		<selectKey keyProperty="rulesId" resultType="long" order="BEFORE">
+			SELECT seq_rulesid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_PROJECT_RULES (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{rulesId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{rulesName, jdbcType=VARCHAR},
+			#{parentId, jdbcType=NUMERIC},
+			#{score, jdbcType=NUMERIC},
+			#{sortNo, jdbcType=NUMERIC},
+			#{remark, jdbcType=VARCHAR},
+			#{isScore, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryKpProjectRulesByPage" resultMap="KpProjectRules" parameterType="KpProjectRules">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_PROJECT_RULES
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rulesId != null and rulesId != '' ">AND RULESID = #{rulesId}</if>
+			<if test="subId != null and subId != ''">AND SUBID = #{subId} </if>
+			<if test="parentId != null and parentId != ''">AND PARENTID = #{parentId} </if>
+			<if test="score != null and score != ''">AND SCORE = #{score} </if>
+			<if test="sortNo != null and sortNo != ''">AND SORTNO = #{sortNo} </if>
+			<if test="isScore != null and isScore != ''">AND ISSCORE = #{isScore} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

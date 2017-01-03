@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>sea-common</artifactId>
+  <packaging>jar</packaging>
+
+  <name>sea-common</name>
+  <url>http://maven.apache.org</url>
+  
+  <!-- 定义父项目 -->  
+  <parent>
+  	  <groupId>org.sea</groupId>
+	  <artifactId>sea-parent</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+	  <!-- 父项目的pom.xml文件所在的相对路径 -->
+	  <relativePath>../sea-parent/pom.xml</relativePath>
+  </parent>
+  
+</project>

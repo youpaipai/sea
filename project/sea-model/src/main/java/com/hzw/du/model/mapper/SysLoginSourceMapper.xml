@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysLoginSourceMapper">
+	<!-- [SYS_LOGIN_SOURCE  登录来源表， 序列seq_loginid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysLoginSource" id="SysLoginSource">
+		<result property="loginId" column="LOGINID" javaType="java.lang.Long" />
+		<result property="loginSource" column="LOGINSOURCE" javaType="java.lang.Integer" />
+		<result property="userId" column="USERID" javaType="java.lang.Long" />
+		<result property="staffCode" column="STAFFCODE" javaType="java.lang.String" />
+		<result property="userName" column="USERNAME" javaType="java.lang.String" />
+		<result property="userType" column="USERTYPE" javaType="java.lang.Integer" />
+		<result property="loginIp" column="LOGINIP" javaType="java.lang.String" />
+		<result property="loginTime" column="LOGINTIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		LOGINID,
+		LOGINSOURCE,
+		USERID,
+		STAFFCODE,
+		USERNAME,
+		USERTYPE,
+		LOGINIP,
+		LOGINTIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysLoginSource" parameterType="SysLoginSource">
+		<selectKey keyProperty="loginId" resultType="long" order="BEFORE">
+			SELECT seq_loginid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_LOGIN_SOURCE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{loginId, jdbcType=NUMERIC},
+			#{loginSource, jdbcType=NUMERIC},
+			#{userId, jdbcType=NUMERIC},
+			#{staffCode, jdbcType=VARCHAR},
+			#{userName, jdbcType=VARCHAR},
+			#{userType, jdbcType=NUMERIC},
+			#{loginIp, jdbcType=VARCHAR},
+			#{loginTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysLoginSourceByPage" resultMap="SysLoginSource" parameterType="SysLoginSource">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_LOGIN_SOURCE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="loginId != null and loginId != '' ">AND LOGINID = #{loginId}</if>
+			<if test="loginSource != null and loginSource != '' ">AND LOGINSOURCE = #{loginSource}</if>
+			<if test="userId != null and userId != '' ">AND USERID = #{userId}</if>
+			<if test="staffCode != null and staffCode != '' ">AND STAFFCODE = #{staffCode}</if>
+			<if test="userName != null and userName != '' ">AND USERNAME = #{userName}</if>
+			<if test="userType != null and userType != '' ">AND USERTYPE = #{userType}</if>
+			<if test="loginIp != null and loginIp != '' ">AND LOGINIP = #{loginIp}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

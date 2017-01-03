@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+     http://www.springframework.org/schema/tx 
+     http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+     http://www.springframework.org/schema/mvc 
+     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:/application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对外提供的唯一接口 servlet -->
+	<bean id="bizHttpRequest" class="com.hzw.du.biz.request.impl.BizHttpRequest">
+		<property name="url" value="${biz.request.url}"></property>
+		<property name="conntectionTimeOut" value="${biz.request.conntectionTimeOut}"></property>
+		<property name="readTimeOut" value="${biz.request.readTimeOut}"></property>
+		<property name="dataEncoding" value="${biz.request.dataEncoding}"></property>
+		<property name="bizVersion" value="${biz.request.bizVersion}"></property>
+		<property name="clientType" value="${biz.request.clientType}"></property>
+	</bean>
+	
+</beans>

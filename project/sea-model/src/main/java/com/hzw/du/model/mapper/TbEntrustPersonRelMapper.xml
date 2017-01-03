@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbEntrustPersonRelMapper">
+	<!-- [TB_ENTRUST_PERSON_REL 招标人关系表] -->
+	<resultMap type="com.hzw.du.model.mapper.TbEntrustPersonRel" id="TbEntrustPersonRel">
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="organizationId" column="ORGANIZATIONID" javaType="java.lang.Long" />
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		TENDERPROJECTID,
+		ORGANIZATIONID
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbEntrustPersonRel" parameterType="TbEntrustPersonRel">
+		INSERT INTO TB_ENTRUST_PERSON_REL (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{organizationId, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryTbEntrustPersonRelByPage" resultMap="TbEntrustPersonRel" parameterType="TbEntrustPersonRel">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_ENTRUST_PERSON_REL
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="organizationId != null and organizationId != '' ">AND ORGANIZATIONID = #{organizationId}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

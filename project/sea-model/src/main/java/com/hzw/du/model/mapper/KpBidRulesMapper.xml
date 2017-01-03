@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpBidRulesMapper">
+	<!-- [KP_BID_RULES  评标规则模板表， 序列seq_bidid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpBidRules" id="KpBidRules">
+		<result property="bidId" column="BIDID" javaType="java.lang.Long"/>
+		<result property="bidName" column="BIDNAME" />
+		<result property="fileId" column="FILEID" javaType="java.lang.Long"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		BIDID,
+		BIDNAME,
+		FILEID,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpBidRules" parameterType="KpBidRules">
+		<selectKey keyProperty="bidId" resultType="long" order="BEFORE">
+			SELECT seq_bidid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_BID_RULES (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{bidId, jdbcType=NUMERIC},
+			#{bidName, jdbcType=VARCHAR},
+			#{fileId, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="queryKpBidRulesByPage" resultMap="KpBidRules" parameterType="KpBidRules">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_BID_RULES
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="bidId != null and bidId != '' ">AND BIDID = #{bidId}</if>
+			<if test="fileId != null and fileId != ''">AND FILEID = #{fileId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

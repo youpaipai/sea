@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.MHHelpMapper">
+	<!-- [MH_HELP  系统帮助表， 序列seq_helpid] -->
+	<resultMap type="com.hzw.du.model.mapper.MHHelp" id="MHHelp">
+		<result property="helpId" column="HELPID" javaType="java.lang.Long" />
+		<result property="title" column="TITLE" javaType="java.lang.String" />
+		<result property="content" column="CONTENT" javaType="java.lang.String" />
+		<result property="type" column="TYPE" javaType="java.lang.Integer"/>
+		<result property="fileId" column="FILEID" javaType="java.lang.Long" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		HELPID,
+		TITLE,
+		CONTENT,
+		TYPE,
+		FILEID,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertMHHelp" parameterType="MHHelp">
+		<selectKey keyProperty="helpId" resultType="long" order="BEFORE">
+			SELECT seq_helpid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO MH_HELP (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{helpId, jdbcType=NUMERIC},
+			#{title, jdbcType=VARCHAR},
+			#{content, jdbcType=VARCHAR},
+			#{type, jdbcType=NUMERIC},
+			#{fileId, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<!-- 更新帮助信息 -->
+	<update id="modifyMHHelp" parameterType="MHHelp">
+		UPDATE MH_HELP
+		<set>
+			<if test="null != title and '' != title"> TITLE = #{title },</if>
+			<if test="null != content and '' != content"> CONTENT = #{content },</if>
+			<if test="null != type and '' != type"> TYPE = #{type },</if>
+			<if test="null != fileId and '' != fileId"> FILEID = #{fileId },</if>
+			<if test="null != updateUser and '' != updateUser"> UPDATEUSER = #{updateUser },</if>
+			<if test="null != updateTime"> UPDATETIME = #{updateTime },</if>
+			<if test="null != status and '' != status"> STATUS = #{status },</if>
+		</set>
+		WHERE HELPID = #{helpId }
+	</update>
+	
+	<select id="queryMHHelpByPage" resultMap="MHHelp" parameterType="MHHelp">
+		SELECT 
+			<include refid="table_sql" />
+		FROM MH_HELP
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="helpId != null and helpId != '' ">AND HELPID = #{helpId}</if>
+			<if test="type != null and type != '' ">AND TYPE = #{type}</if>
+			<if test="fileId != null and fileId != ''">AND FILEID = #{fileId} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+	<!-- 获取帮助信息 -->
+	<select id="getMHHelpById" resultMap="MHHelp" parameterType="java.lang.Long">
+		SELECT H.*, F.FILENAME FROM (
+		SELECT 
+			<include refid="table_sql" />
+		FROM MH_HELP WHERE HELPID = #{helpId} ) H
+		LEFT JOIN SYS_FILE F ON H.FILEID = F.FILEID
+	</select>
+	
+</mapper>
+

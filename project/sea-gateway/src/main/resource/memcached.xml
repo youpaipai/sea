@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	">
+
+<!-- memcached注入 -->
+  <bean id="memcachedClient" class="net.spy.memcached.spring.MemcachedClientFactoryBean">
+  	<!-- servers:一个字符串，包括由空格或逗号分隔的主机或IP地址与端口号 -->
+	<property name="servers" value="10.10.10.244:11211" />
+	
+	<!-- Protocol:指定要使用的协议(BINARY,TEXT),默认是TEXT-->
+	<property name="protocol" value="BINARY" />
+	
+	<!-- Transcoder:设置默认的转码器(默认以net.spy.memcached.transcoders.SerializingTranscoder)-->
+	<property name="transcoder">
+		<bean class="net.spy.memcached.transcoders.SerializingTranscoder">
+			<property name="compressionThreshold" value="1024" />
+		</bean>
+	</property>
+	
+	<!-- OpTimeout:以毫秒为单位设置默认的操作超时时间-->
+	<property name="opTimeout" value="1800000" />
+	
+	<!-- 设置超时次数上限是1998次，默认是DEFAULT_MAX_TIMEOUTEXCEPTION_THRESHOLD，即998次 -->
+	<property name="timeoutExceptionThreshold" value="1998" />
+	
+	<!-- HashAlg:设置哈希算法(见net.spy.memcached.HashAlgorithm的值) -->
+	<property name="hashAlg">
+		<value type="net.spy.memcached.DefaultHashAlgorithm">KETAMA_HASH</value>
+	</property>
+	
+	<!-- LocatorType:设置定位器类型(ARRAY_MOD,CONSISTENT),默认是ARRAY_MOD-->
+	<property name="locatorType" value="CONSISTENT" />
+	
+	<!-- FailureMode:设置故障模式(取消，重新分配，重试)，默认是重新分配 -->
+	<property name="failureMode" value="Redistribute" />
+	
+	<!-- UseNagleAlgorithm:如果你想使用Nagle算法，设置为true-->
+	<property name="useNagleAlgorithm" value="false" />
+</bean> 
+</beans>

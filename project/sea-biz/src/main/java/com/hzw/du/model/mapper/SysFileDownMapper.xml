@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysFileDownMapper">
+	<!-- [SYS_FILE_DOWN  文件下载表， 序列seq_downid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysFileDown" id="SysFileDown">
+		<result property="downId" column="DOWNID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="orgId" column="ORGID" javaType="java.lang.Long" />
+		<result property="downFileId" column="DOWNFILEID" javaType="java.lang.Long" />
+		<result property="downPerson" column="DOWNPERSON" javaType="java.lang.Long" />
+		<result property="downTime" column="DOWNTIME" javaType="java.util.Date" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		DOWNID,
+		SUBID,
+		ORGID,
+		DOWNFILEID,
+		DOWNPERSON,
+		DOWNTIME,
+		STATUS
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysFileDown" parameterType="SysFileDown">
+		<selectKey keyProperty="downId" resultType="long" order="BEFORE">
+			SELECT seq_downid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_FILE_DOWN (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{downId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{orgId, jdbcType=NUMERIC},
+			#{downFileId, jdbcType=NUMERIC},
+			#{downPerson, jdbcType=NUMERIC},
+			#{downTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<select id="querySysFileDownByPage" resultMap="SysFileDown" parameterType="SysFileDown">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_FILE_DOWN
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="downId != null and downId != '' ">AND DOWNID = #{downId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="orgId != null and orgId != '' ">AND ORGID = #{orgId}</if>
+			<if test="downFileId != null and downFileId != '' ">AND DOWNFILEID = #{downFileId}</if>
+			<if test="downPerson != null and downPerson != '' ">AND DOWNPERSON = #{downPerson}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

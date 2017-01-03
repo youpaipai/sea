@@ -1,0 +1,361 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hzw.du.manageweb</groupId>
+	<artifactId>ctp-manageActiviti</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ctp-manageActiviti</name>
+	<url>http://maven.apache.org</url>
+	<properties>  
+      <!-- 版本定义 start -->
+      <spring.version>4.2.1.RELEASE</spring.version>
+      <mybatis.version>3.2.5</mybatis.version>
+      <activiti.version>5.21.0</activiti.version>
+      <!-- cargo 远程发布start -->
+      <remote.server.type>tomcat7x</remote.server.type>
+      <remote.server.host>172.16.0.163</remote.server.host><!-- 远程发布web服务器的IP -->
+      <remote.server.port>8080</remote.server.port>
+      <remote.server.username>admin</remote.server.username>
+      <remote.server.password>password</remote.server.password>
+      <remote.manager.url>http://${remote.server.host}:${remote.server.port}/manager/html</remote.manager.url>
+      <!-- cargo 远程发布stop -->
+      <!-- MyBatis Generator 自动生成配置  -->
+      <!-- 定义全局编码 -->
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties> 
+	<dependencies>
+		<dependency>
+			<groupId>com.hzw.du.common</groupId>
+			<artifactId>ctp-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hzw.du.biz.bean</groupId>
+			<artifactId>ctp-bizbean</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>ch.qos.logback</groupId>
+		  <artifactId>logback-core</artifactId>
+		  <version>1.1.3</version>
+		</dependency>
+		<dependency>
+		  <groupId>ch.qos.logback</groupId>
+		  <artifactId>logback-classic</artifactId>
+		  <version>1.1.3</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.logback-extensions</groupId>
+		  <artifactId>logback-ext-spring</artifactId>
+		  <version>0.1.4</version>
+		</dependency>
+		
+		<!-- felxjson -->
+  		<dependency>
+			<groupId>net.sf.flexjson</groupId>
+			<artifactId>flexjson</artifactId>
+			<version>3.3</version>
+		</dependency>
+		
+		<!-- spring 7个模块依赖包 -->
+		<dependency>  
+		    <groupId>org.springframework</groupId>  
+		    <artifactId>spring-core</artifactId>  
+		    <version>${spring.version}</version>  
+		</dependency> 
+		<dependency>
+		  	<groupId>org.springframework</groupId>
+		  	<artifactId>spring-context-support</artifactId>
+		  	<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-instrument</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-instrument-tomcat</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- 支持springmvc 自带的JSON需要jackson的jar包支持 -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.mybatis</groupId>
+		  <artifactId>mybatis</artifactId>
+		  <version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.mybatis</groupId>
+		  <artifactId>mybatis-spring</artifactId>
+		  <version>1.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.7</version>
+		</dependency>
+		
+		<dependency>
+		  	<groupId>junit</groupId>
+		  	<artifactId>junit</artifactId>
+		  	<version>4.9</version>
+		</dependency>
+	<!-- activiti相关jar包 -->
+		 <dependency>  
+	        <groupId>org.springframework</groupId>  
+	        <artifactId>spring-beans</artifactId>  
+	        <version>${spring.version}</version>  
+	     </dependency> 
+	     <dependency>  
+		        <groupId>org.springframework</groupId>  
+		        <artifactId>spring-aop</artifactId>  
+		        <version>${spring.version}</version>  
+	     </dependency> 
+		  <dependency>  
+		        <groupId>org.springframework</groupId>  
+		        <artifactId>spring-context</artifactId>  
+		        <version>${spring.version}</version>  
+		   </dependency>  
+		    <dependency>  
+		        <groupId>org.springframework</groupId>  
+		        <artifactId>spring-expression</artifactId>  
+		        <version>${spring.version}</version>  
+		    </dependency>  
+		    <dependency>  
+		        <groupId>org.springframework</groupId>  
+		        <artifactId>spring-tx</artifactId>  
+		        <version>${spring.version}</version>  
+		    </dependency>  
+		    <dependency>  
+		        <groupId>org.activiti</groupId>  
+		        <artifactId>activiti-modeler</artifactId>  
+		        <version>5.16</version>  
+		    </dependency> 
+		    <dependency>  
+		        <groupId>org.activiti</groupId>  
+		        <artifactId>activiti-engine</artifactId>  
+		        <version>5.16</version>  
+		    </dependency>  
+		    <dependency>  
+		        <groupId>org.activiti</groupId>  
+		        <artifactId>activiti-explorer</artifactId>  
+		        <version>5.16</version>  
+		    </dependency> 
+		    <dependency>  
+		        <groupId>org.activiti</groupId>  
+		        <artifactId>activiti-rest</artifactId>  
+		        <version>5.16</version>  
+		    </dependency>  
+		    <dependency>  
+		        <groupId>org.activiti</groupId>  
+		        <artifactId>activiti-spring</artifactId>  
+		        <version>5.16</version>  
+		    </dependency>
+	<!-- cargo maven 自动化部署 -->
+
+	</dependencies>
+	
+	<!-- 插件管理 -->
+	<build>
+		<finalName>ctp-manageActiviti</finalName>
+
+		<pluginManagement>
+			<plugins>
+				<!-- 远程部署 -->
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.3.3</version>
+					<configuration>
+					
+						<container>
+							<containerId>${remote.server.type}</containerId>
+							<!-- 远程发布，必须指定为remote -->
+							<type>remote</type>
+						</container>
+						
+						<configuration>
+							<type>runtime</type>  
+							<properties>  
+								<cargo.hostname>${remote.server.host}</cargo.hostname><!-- 远程web服务器的IP -->
+	                            <cargo.remote.username>${remote.server.username}</cargo.remote.username><!-- 远程web服务器的用户和密码 -->  
+	                            <cargo.remote.password>${remote.server.password}</cargo.remote.password> 
+	                            <cargo.servlet.port>${remote.server.port}</cargo.servlet.port><!-- 远程web服务器的端口号 --> 
+	                            <cargo.remote.manager.url>${remote.manager.url}</cargo.remote.manager.url><!-- 远程web服务器的管理页面的URL -->
+                        	</properties>
+                        	  
+						</configuration>
+					</configuration>
+				</plugin>
+
+				<!-- 自动升级版本插件 <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-release-plugin</artifactId> 
+					<version>2.5.2</version> <configuration> <tagBase>http://10.10.10.223:9000/svn/hzw/trunk/02 
+					项目开发类/107 系统开发/GAMP/CodeResource/tags/</tagBase> </configuration> </plugin> -->
+
+				<!-- maven编译插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.1</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+						<encoding>utf8</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- 要将源码发布到nexus，需要加入这个插件 -->
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<attach>true</attach>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>compile</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				
+				<!-- mybatis-generator 自动生成插件 -->
+				<plugin>
+	                <groupId>org.mybatis.generator</groupId>
+	                <artifactId>mybatis-generator-maven-plugin</artifactId>
+	                <version>1.3.2</version>
+	                <configuration>
+	                    <verbose>true</verbose>
+	                    <overwrite>true</overwrite>
+	                </configuration>
+            	</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+	
+	<!-- 配置私服仓库地址:注意，ID标签的值，要和maven的settings.xml文件配置的server标签的ID属性保持一致 -->
+	<distributionManagement>
+		<!-- 发布版本 ：已经基线可以发布的版本 -->
+		<repository>
+			<id>releases</id>
+			<url>http://172.16.0.11:8077/nexus/content/repositories/releases/</url>
+		</repository>
+
+		<!-- 快照版本:开发中，不稳定的版本 -->
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://172.16.0.11:8077/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>

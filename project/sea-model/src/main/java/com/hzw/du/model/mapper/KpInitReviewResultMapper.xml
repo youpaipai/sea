@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.KpInitReviewResultMapper">
+	<!-- [KP_INIT_REVIEW_RESULT  初步评审结果表， 序列seq_resultid] -->
+	<resultMap type="com.hzw.du.model.mapper.KpInitReviewResult" id="KpInitReviewResult">
+		<result property="resultId" column="RESULTID" javaType="java.lang.Long"/>
+		<result property="subId" column="SUBID" javaType="java.lang.Long"/>
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long"/>
+		<result property="supplierId" column="SUPPLIERID" javaType="java.lang.Long"/>
+		<result property="isBarely" column="ISBARELY" javaType="java.lang.Integer"/>
+		<result property="initResult" column="INITRESULT" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		RESULTID,
+		SUBID,
+		TENDERPROJECTID,
+		SUPPLIERID,
+		ISBARELY,
+		INITRESULT,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertKpInitReviewResult" parameterType="KpInitReviewResult">
+		<selectKey keyProperty="resultId" resultType="long" order="BEFORE">
+			SELECT seq_resultid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO KP_INIT_REVIEW_RESULT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{resultId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{supplierId, jdbcType=NUMERIC},
+			#{isBarely, jdbcType=NUMERIC},
+			#{initResult, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryKpInitReviewResultByPage" resultMap="KpInitReviewResult" parameterType="KpInitReviewResult">
+		SELECT 
+			<include refid="table_sql" />
+		FROM KP_INIT_REVIEW_RESULT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="resultId != null and resultId != '' ">AND RESULTID = #{resultId}</if>
+			<if test="subId != null and subId != ''">AND SUBID = #{subId} </if>
+			<if test="tenderProjectId != null and tenderProjectId != ''">AND TENDERPROJECTID = #{tenderProjectId} </if>
+			<if test="supplierId != null and supplierId != ''">AND SUPPLIERID = #{supplierId} </if>
+			<if test="isBarely != null and isBarely != ''">AND ISBARELY = #{isBarely} </if>
+			<if test="status != null and status != ''">AND STATUS = #{status} </if>
+		</trim> 
+	</select>
+	
+</mapper>
+

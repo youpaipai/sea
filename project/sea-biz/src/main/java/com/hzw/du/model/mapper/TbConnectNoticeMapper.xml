@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbConnectNoticeMapper">
+	<!-- [TB_CONNECT_NOTICE 公告表， 序列seq_noticeid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbConnectNotice" id="TbConnectNotice">
+		<result property="noticeId" column="NOTICEID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="title" column="TITLE" javaType="java.lang.String" />
+		<result property="content" column="CONTENT" javaType="java.lang.String" />
+		<result property="noticeType" column="NOTICETYPE" javaType="java.lang.Integer" />
+		<result property="noticeNature" column="NOTICENATURE" javaType="java.lang.Integer" />
+		<result property="startTime" column="STARTTIME" javaType="java.util.Date"/>
+		<result property="endTime" column="ENDTIME" javaType="java.util.Date"/>
+		<result property="fileId" column="FILEID" javaType="java.lang.Long"/>
+		<result property="releasesMedia" column="RELEASESMEDIA" javaType="java.lang.String"/>
+		<result property="openTime" column="OPENTIME" javaType="java.util.Date"/>
+		<result property="openAddress" column="OPENADDRESS" javaType="java.lang.String"/>
+		<result property="noticeNum" column="NOTICENUM" javaType="java.lang.Integer" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		NOTICEID,
+		TENDERPROJECTID,
+		SUBID,
+		TITLE,
+		CONTENT,
+		NOTICETYPE,
+		NOTICENATURE,
+		STARTTIME,
+		ENDTIME,
+		FILEID,
+		RELEASESMEDIA,
+		OPENTIME,
+		OPENADDRESS,
+		NOTICENUM,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<sql id="where_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="noticeId != null and noticeId != '' ">AND NOTICEID = #{noticeId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="title != null and title != '' ">AND TITLE = #{title}</if>
+			<if test="noticeType != null and noticeType != '' ">AND NOTICETYPE = #{noticeType}</if>
+			<if test="noticeNature != null and noticeNature != '' ">AND NOTICENATURE = #{noticeNature}</if>
+			<if test="fileId != null and fileId != '' ">AND FILEID = #{fileId}</if>
+			<if test="noticeNum != null and noticeNum != '' ">AND NOTICENUM = #{noticeNum}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+			<!-- 多余条件 -->
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.noticeIdList != null and conditonMap.noticeIdList.size() != 0">
+					and NOTICEID in
+					<foreach collection="conditonMap.noticeIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectIdList != null and conditonMap.tenderProjectIdList.size() != 0">
+					and TENDERPROJECTID in
+					<foreach collection="conditonMap.tenderProjectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.subIdList != null and conditonMap.subIdList.size() != 0">
+					and SUBID in
+					<foreach collection="conditonMap.subIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.likeTitle != null and conditonMap.likeTitle != ''">
+					and TITLE like '%${conditonMap.likeTitle}%'
+				</if>
+				<if test="conditonMap.noticeTypeList != null and conditonMap.noticeTypeList.size() != 0">
+					and NOTICETYPE in
+					<foreach collection="conditonMap.noticeTypeList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.noticeNatureList != null and conditonMap.noticeNatureList.size() != 0">
+					and NOTICENATURE in
+					<foreach collection="conditonMap.noticeNatureList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.startTime_lt != null and conditonMap.startTime_lt != ''">
+					and to_char(STARTTIME, 'yyyymmddhh24miss') &lt; #{conditonMap.startTime_lt}
+				</if>
+				<if test="conditonMap.startTime_lte != null and conditonMap.startTime_lte != ''">
+					and to_char(STARTTIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.startTime_lte}
+				</if>
+				<if test="conditonMap.startTime_gt != null and conditonMap.startTime_gt != ''">
+					and to_char(STARTTIME, 'yyyymmddhh24miss') &gt; #{conditonMap.startTime_gt}
+				</if>
+				<if test="conditonMap.startTime_gte != null and conditonMap.startTime_gte != ''">
+					and to_char(STARTTIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.startTime_gte}
+				</if>
+				<if test="conditonMap.startTime_eq != null and conditonMap.startTime_eq != ''">
+					and to_char(STARTTIME, 'yyyymmddhh24miss') = #{conditonMap.startTime_eq}
+				</if>
+				
+				<if test="conditonMap.endTime_lt != null and conditonMap.endTime_lt != ''">
+					and to_char(ENDTIME, 'yyyymmddhh24miss') &lt; #{conditonMap.endTime_lt}
+				</if>
+				<if test="conditonMap.endTime_lte != null and conditonMap.endTime_lte != ''">
+					and to_char(ENDTIME, 'yyyymmddhh24miss') &lt;= #{conditonMap.endTime_lte}
+				</if>
+				<if test="conditonMap.endTime_gt != null and conditonMap.endTime_gt != ''">
+					and to_char(ENDTIME, 'yyyymmddhh24miss') &gt; #{conditonMap.endTime_gt}
+				</if>
+				<if test="conditonMap.endTime_gte != null and conditonMap.endTime_gte != ''">
+					and to_char(ENDTIME, 'yyyymmddhh24miss') &gt;= #{conditonMap.endTime_gte}
+				</if>
+				<if test="conditonMap.endTime_eq != null and conditonMap.endTime_eq != ''">
+					and to_char(ENDTIME, 'yyyymmddhh24miss') = #{conditonMap.startTime_eq}
+				</if>
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbConnectNotice" parameterType="TbConnectNotice">
+		<selectKey keyProperty="noticeId" resultType="long" order="BEFORE">
+			SELECT seq_noticeid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_CONNECT_NOTICE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{noticeId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{title, jdbcType=VARCHAR},
+			#{content, jdbcType=CLOB},
+			#{noticeType, jdbcType=NUMERIC},
+			#{noticeNature, jdbcType=NUMERIC},
+			#{startTime, jdbcType=TIMESTAMP},
+			#{endTime, jdbcType=TIMESTAMP},
+			#{fileId, jdbcType=NUMERIC},
+			#{releasesMedia, jdbcType=VARCHAR},
+			#{openTime, jdbcType=TIMESTAMP},
+			#{openAddress, jdbcType=VARCHAR},
+			#{noticeNum, jdbcType=NUMERIC},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbConnectNoticeByPage" resultMap="TbConnectNotice" parameterType="TbConnectNotice">
+		SELECT * FROM (
+			SELECT T.* , T1.TENDERPROJECTTYPE FROM (
+				SELECT 
+					<include refid="table_sql" />
+				FROM TB_CONNECT_NOTICE
+				<include refid="where_sql" />
+			) T
+			Left join TB_TENDER_PROJECT T1
+				on T1.TENDERPROJECTID = T.TENDERPROJECTID
+		) T2
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.noticeNatureList != null and conditonMap.noticeNatureList.size() != 0">
+					and 
+					<foreach collection="conditonMap.noticeNatureList" item="item" open="("  separator="OR" close=")">
+						T2.TENDERPROJECTTYPE like '${item}%'
+					</foreach>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbBailCertificatesMapper">
+	<!-- [TB_BAIL_CERTIFICATES 供应商保证金表， 序列seq_bailid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbBailCertificates" id="TbBailCertificates">
+		<result property="bailId" column="BAILID" javaType="java.lang.Long" />
+		<result property="subId" column="SUBID" javaType="java.lang.Long" />
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="standardId" column="STANDARDID" javaType="java.lang.Long" />
+		<result property="fileId" column="FILEID" javaType="java.lang.Long" />
+		<result property="payType" column="PAYTYPE" javaType="java.lang.String" />
+		<result property="bailMoney" column="BAILMONEY" javaType="java.math.BigDecimal" />
+		<result property="currencyCode" column="CURRENCYCODE" javaType="java.lang.String" />
+		<result property="priceUnit" column="PRICEUNIT" javaType="java.lang.String" />
+		<result property="returnStatus" column="RETURNSTATUS" javaType="java.lang.Integer" />
+		<result property="arrivalTime" column="ARRIVALTIME" javaType="java.util.Date"/>
+		<result property="returnTime" column="RETURNTIME" javaType="java.util.Date"/>
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		BAILID,
+		SUBID,
+		TENDERPROJECTID,
+		STANDARDID,
+		FILEID,
+		PAYTYPE,
+		BAILMONEY,
+		CURRENCYCODE,
+		PRICEUNIT,
+		RETURNSTATUS,
+		ARRIVALTIME,
+		RETURNTIME,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertTbBailCertificates" parameterType="TbBailCertificates">
+		<selectKey keyProperty="bailId" resultType="long" order="BEFORE">
+			SELECT seq_bailid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_BAIL_CERTIFICATES (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{bailId, jdbcType=NUMERIC},
+			#{subId, jdbcType=NUMERIC},
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{standardId, jdbcType=NUMERIC},
+			#{fileId, jdbcType=NUMERIC},
+			#{payType, jdbcType=VARCHAR},
+			#{bailMoney, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{returnStatus, jdbcType=NUMERIC},
+			#{arrivalTime, jdbcType=TIMESTAMP},
+			#{returnTime, jdbcType=TIMESTAMP},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbBailCertificatesByPage" resultMap="TbBailCertificates" parameterType="TbBailCertificates">
+		SELECT 
+			<include refid="table_sql" />
+		FROM TB_BAIL_CERTIFICATES
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="bailId != null and bailId != '' ">AND BAILID = #{bailId}</if>
+			<if test="subId != null and subId != '' ">AND SUBID = #{subId}</if>
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="standardId != null and standardId != '' ">AND STANDARDID = #{standardId}</if>
+			<if test="fileId != null and fileId != '' ">AND FILEID = #{fileId}</if>
+			<if test="payType != null and payType != '' ">AND PAYTYPE = #{payType}</if>
+			<if test="bailMoney != null and bailMoney != '' ">AND BAILMONEY = #{bailMoney}</if>
+			<if test="currencyCode != null and currencyCode != '' ">AND CURRENCYCODE = #{currencyCode}</if>
+			<if test="priceUnit != null and priceUnit != '' ">AND PRICEUNIT = #{priceUnit}</if>
+			<if test="returnStatus != null and returnStatus != '' ">AND RETURNSTATUS = #{returnStatus}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

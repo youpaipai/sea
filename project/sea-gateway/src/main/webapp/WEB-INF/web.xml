@@ -1,0 +1,60 @@
+<!DOCTYPE web-app >
+
+<web-app>
+
+	<display-name>ctp-bizweb</display-name>
+	
+	<!-- 修改spring配置文件的路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- 加载spring配置文件 -->
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!-- 配置logback -->
+	<context-param>
+		<param-name>logbackConfigLocation</param-name>
+		<param-value>classpath:logback.xml</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>ctp-bizweb</param-value>
+		<description>业务接口系统</description>
+	</context-param>
+	
+	<!-- 配置spring监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+	</listener>
+	<!-- spring过滤器控制乱码 -->
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 业务系统 -->
+	<servlet>
+		<display-name>GatewayAPIServlet</display-name>
+		<servlet-name>GatewayAPIServlet</servlet-name>
+		<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>GatewayAPIServlet</servlet-name>
+	    <url-pattern>/GatewayAPIServlet.servlet</url-pattern>
+	</servlet-mapping>
+	
+</web-app>
+

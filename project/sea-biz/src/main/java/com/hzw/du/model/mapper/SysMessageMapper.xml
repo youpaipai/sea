@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysMessageMapper">
+	<!-- [SYS_MESSAGE  系统消息表， 序列seq_smid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysMessage" id="SysMessage">
+		<result property="smId" column="SMID" javaType="java.lang.Long" />
+		<result property="smTitle" column="SMTITLE" javaType="java.lang.String" />
+		<result property="smContent" column="SMCONTENT" javaType="java.lang.String" />
+		<result property="smDate" column="SMDATE" javaType="java.util.Date" />
+		<result property="isTrue" column="ISTRUE" javaType="java.lang.Integer" />
+		<result property="isAdmin" column="ISADMIN" javaType="java.lang.Integer" />
+		<result property="touserId" column="TOUSERID" javaType="java.lang.Long" />
+		<result property="toIsDel" column="TOISDEL" javaType="java.lang.Integer" />
+		<result property="formIsDel" column="FORMISDEL" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		SMID,
+		SMTITLE,
+		SMCONTENT,
+		SMDATE,
+		ISTRUE,
+		ISADMIN,
+		TOUSERID,
+		TOISDEL,
+		FORMISDEL,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysMessage" parameterType="SysMessage">
+		<selectKey keyProperty="smId" resultType="long" order="BEFORE">
+			SELECT seq_smid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_MESSAGE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{smId, jdbcType=NUMERIC},
+			#{smTitle, jdbcType=VARCHAR},
+			#{smContent, jdbcType=VARCHAR},
+			#{smDate, jdbcType=TIMESTAMP},
+			#{isTrue, jdbcType=NUMERIC},
+			#{isAdmin, jdbcType=NUMERIC},
+			#{touserId, jdbcType=NUMERIC},
+			#{toIsDel, jdbcType=NUMERIC},
+			#{formIsDel, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysMessageByPage" resultMap="SysMessage" parameterType="SysMessage">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_MESSAGE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="smId != null and smId != '' ">AND SMID = #{smId}</if>
+			<if test="smTitle != null and smTitle != '' ">AND SMTITLE = #{smTitle}</if>
+			<if test="isTrue != null and isTrue != '' ">AND ISTRUE = #{isTrue}</if>
+			<if test="isAdmin != null and isAdmin != '' ">AND ISADMIN = #{isAdmin}</if>
+			<if test="touserId != null and touserId != '' ">AND TOUSERID = #{touserId}</if>
+			<if test="toIsDel != null and toIsDel != '' ">AND TOISDEL = #{toIsDel}</if>
+			<if test="formIsDel != null and formIsDel != '' ">AND FORMISDEL = #{formIsDel}</if>
+		</trim>
+	</select>
+	
+</mapper>
+

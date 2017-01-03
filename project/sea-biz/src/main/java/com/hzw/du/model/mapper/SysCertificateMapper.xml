@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.SysCertificateMapper">
+	<!-- [SYS_CERTIFICATE  证书管理信息表， 序列seq_certificateid] -->
+	<resultMap type="com.hzw.du.model.mapper.SysCertificate" id="SysCertificate">
+		<result property="certificateId" column="CERTIFICATEID" javaType="java.lang.Long" />
+		<result property="certificateKey" column="CERTIFICATEKEY" javaType="java.lang.String" />
+		<result property="registerUser" column="REGISTERUSER" javaType="java.lang.Long" />
+		<result property="certificateType" column="CERTIFICATETYPE" javaType="java.lang.Integer" />
+		<result property="gmpTime" column="GMPTIME" javaType="java.util.Date" />
+		<result property="useOffice" column="USEOFFICE" javaType="java.lang.String" />
+		<result property="useDate" column="USEDATE" javaType="java.util.Date" />
+		<result property="ownerName" column="OWNERNAME" javaType="java.lang.String" />
+		<result property="ownerValidation" column="OWNERVALIDATION" javaType="java.lang.String" />
+		<result property="officeValidation" column="OFFICEVALIDATION" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer"/>
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		CERTIFICATEID,
+		CERTIFICATEKEY,
+		REGISTERUSER,
+		CERTIFICATETYPE,
+		GMPTIME,
+		USEOFFICE,
+		USEDATE,
+		OWNERNAME,
+		OWNERVALIDATION,
+		OFFICEVALIDATION,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	
+	<!-- 插入一条记录 -->
+	<insert id="insertSysCertificate" parameterType="SysCertificate">
+		<selectKey keyProperty="certificateId" resultType="long" order="BEFORE">
+			SELECT seq_certificateid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO SYS_CERTIFICATE (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{certificateId, jdbcType=NUMERIC},
+			#{certificateKey, jdbcType=VARCHAR},
+			#{registerUser, jdbcType=NUMERIC},
+			#{certificateType, jdbcType=NUMERIC},
+			#{gmpTime, jdbcType=TIMESTAMP},
+			#{useOffice, jdbcType=VARCHAR},
+			#{useDate, jdbcType=TIMESTAMP},
+			#{ownerName, jdbcType=VARCHAR},
+			#{ownerValidation, jdbcType=VARCHAR},
+			#{officeValidation, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="querySysCertificateByPage" resultMap="SysCertificate" parameterType="SysCertificate">
+		SELECT 
+			<include refid="table_sql" />
+		FROM SYS_CERTIFICATE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="certificateId != null and certificateId != '' ">AND CERTIFICATEID = #{certificateId}</if>
+			<if test="certificateKey != null and certificateKey != '' ">AND CERTIFICATEKEY = #{certificateKey}</if>
+			<if test="registerUser != null and registerUser != '' ">AND REGISTERUSER = #{registerUser}</if>
+			<if test="certificateType != null and certificateType != '' ">AND CERTIFICATETYPE = #{certificateType}</if>
+			<if test="ownerName != null and ownerName != '' ">AND OWNERNAME = #{ownerName}</if>
+			<if test="useOffice != null and useOffice != '' ">AND USEOFFICE = #{useOffice}</if>
+		</trim> 
+	</select>
+	
+</mapper>
+

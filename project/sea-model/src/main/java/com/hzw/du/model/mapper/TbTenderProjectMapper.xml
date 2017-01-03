@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzw.du.model.mapper.TbTenderProjectMapper">
+	<!-- [TB_TENDER_PROJECT 招标项目表， 序列seq_tenderprojectid] -->
+	<resultMap type="com.hzw.du.model.mapper.TbTenderProject" id="TbTenderProject">
+		<result property="tenderProjectId" column="TENDERPROJECTID" javaType="java.lang.Long" />
+		<result property="projectId" column="PROJECTID" javaType="java.lang.Long" />
+		<result property="tenderProjectNum" column="TENDERPROJECTNUM" javaType="java.lang.String" />
+		<result property="tenderProjectName" column="TENDERPROJECTNAME" javaType="java.lang.String" />
+		<result property="tenderContent" column="TENDERCONTENT" javaType="java.lang.String" />
+		<result property="orgSuperviseDeptId" column="ORGSUPERVISEDEPTID" javaType="java.lang.Long" />
+		<result property="orgApproveDeptId" column="ORGAPPROVEDEPTID" javaType="java.lang.Long" />
+		<result property="tenderId" column="TENDERID" javaType="java.lang.Long" />
+		<result property="tenderMode" column="TENDERMODE" javaType="java.lang.Integer" />
+		<result property="tenderOrganziForm" column="TENDERORGANIZIFORM" javaType="java.lang.Integer" />
+		<result property="contractFile" column="CONTRACTFILE" javaType="java.lang.Long" />
+		<result property="subMoney" column="SUBMONEY" javaType="java.math.BigDecimal" />
+		<result property="subReckonPrice" column="SUBRECKONPRICE" javaType="java.math.BigDecimal" />
+		<result property="currencyCode" column="CURRENCYCODE" javaType="java.lang.String" />
+		<result property="priceUnit" column="PRICEUNIT" javaType="java.lang.String" />
+		<result property="tenderProjectType" column="TENDERPROJECTTYPE" javaType="java.lang.String" />
+		<result property="status" column="STATUS" javaType="java.lang.Integer" />
+		<result property="createUser" column="CREATEUSER" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATETIME" javaType="java.util.Date"/>
+		<result property="updateUser" column="UPDATEUSER" javaType="java.lang.Long"/>
+		<result property="updateTime" column="UPDATETIME" javaType="java.util.Date"/>
+		<result property="subNum" column="subNum" javaType="java.lang.Integer"/>
+		<result property="pushNoticeNum" column="pushNoticeNum" javaType="java.lang.Integer"/>
+		<result property="changeNoticeNum" column="changeNoticeNum" javaType="java.lang.Integer"/>
+		<result property="supplierNum" column="supplierNum" javaType="java.lang.Integer"/>
+	</resultMap>
+	<!-- 公共表字段 -->
+	<sql id="table_sql">
+		TENDERPROJECTID,
+		PROJECTID,
+		TENDERPROJECTNUM,
+		TENDERPROJECTNAME,
+		TENDERCONTENT,
+		ORGSUPERVISEDEPTID,
+		ORGAPPROVEDEPTID,
+		TENDERID,
+		TENDERMODE,
+		TENDERORGANIZIFORM,
+		CONTRACTFILE,
+		SUBMONEY,
+		SUBRECKONPRICE,
+		CURRENCYCODE,
+		PRICEUNIT,
+		TENDERPROJECTTYPE,
+		STATUS,
+		CREATEUSER,
+		CREATETIME,
+		UPDATEUSER,
+		UPDATETIME
+	</sql>
+	<sql id="where_sql">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="tenderProjectId != null and tenderProjectId != '' ">AND TENDERPROJECTID = #{tenderProjectId}</if>
+			<if test="projectId != null and projectId != '' ">AND PROJECTID = #{projectId}</if>
+			<if test="tenderProjectNum != null and tenderProjectNum != '' ">AND TENDERPROJECTNUM = #{tenderProjectNum}</if>
+			<if test="tenderProjectName != null and tenderProjectName != '' ">AND TENDERPROJECTNAME = #{tenderProjectName}</if>
+			<if test="orgSuperviseDeptId != null and orgSuperviseDeptId != '' ">AND ORGSUPERVISEDEPTID = #{orgSuperviseDeptId}</if>
+			<if test="orgApproveDeptId != null and orgApproveDeptId != '' ">AND ORGAPPROVEDEPTID = #{orgApproveDeptId}</if>
+			<if test="tenderId != null and tenderId != '' ">AND TENDERID = #{tenderId}</if>
+			<if test="tenderMode != null and tenderMode != '' ">AND TENDERMODE = #{tenderMode}</if>
+			<if test="tenderOrganziForm != null and tenderOrganziForm != '' ">AND TENDERORGANIZIFORM = #{tenderOrganziForm}</if>
+			<if test="contractFile != null and contractFile != '' ">AND CONTRACTFILE = #{contractFile}</if>
+			<if test="subMoney != null and subMoney != '' ">AND SUBMONEY = #{subMoney}</if>
+			<if test="subReckonPrice != null and subReckonPrice != '' ">AND SUBRECKONPRICE = #{subReckonPrice}</if>
+			<if test="currencyCode != null and currencyCode != '' ">AND CURRENCYCODE = #{currencyCode}</if>
+			<if test="priceUnit != null and priceUnit != '' ">AND PRICEUNIT = #{priceUnit}</if>
+			<if test="tenderProjectType != null and tenderProjectType != '' ">AND TENDERPROJECTTYPE = #{tenderProjectType}</if>
+			<if test="status != null ">AND STATUS = #{status}</if>
+			<!-- 多余条件 -->
+			<if test="conditonMap != null and conditonMap.size() != 0 ">
+				<if test="conditonMap.tenderProjectIdList != null and conditonMap.tenderProjectIdList.size() != 0">
+					and TENDERPROJECTID in
+					<foreach collection="conditonMap.tenderProjectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.projectIdList != null and conditonMap.projectIdList.size() != 0">
+					and PROJECTID in
+					<foreach collection="conditonMap.projectIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectNumList != null and conditonMap.tenderProjectNumList.size() != 0">
+					and TENDERPROJECTNUM in
+					<foreach collection="conditonMap.tenderProjectNumList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectNumLike != null and conditonMap.tenderProjectNumLike != ''">
+					and TENDERPROJECTNUM like '%${conditonMap.tenderProjectNumLike}%'
+				</if>
+				<if test="conditonMap.tenderProjectNameList != null and conditonMap.tenderProjectNameList.size() != 0">
+					and TENDERPROJECTNAME in
+					<foreach collection="conditonMap.tenderProjectNameList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderProjectNameLike != null and conditonMap.tenderProjectNameLike != ''">
+					and TENDERPROJECTNAME like '%${conditonMap.tenderProjectNameLike}%'
+				</if>
+				<if test="conditonMap.orgSuperviseDeptIdList != null and conditonMap.orgSuperviseDeptIdList.size() != 0">
+					and ORGSUPERVISEDEPTID in
+					<foreach collection="conditonMap.orgSuperviseDeptIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.orgApproveDeptIdList != null and conditonMap.orgApproveDeptIdList.size() != 0">
+					and ORGAPPROVEDEPTID in
+					<foreach collection="conditonMap.orgApproveDeptIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderIdList != null and conditonMap.tenderIdList.size() != 0">
+					and TENDERID in
+					<foreach collection="conditonMap.tenderIdList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderModeList != null and conditonMap.tenderModeList.size() != 0">
+					and TENDERMODE in
+					<foreach collection="conditonMap.tenderModeList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="conditonMap.tenderOrganziFormList != null and conditonMap.tenderOrganziFormList.size() != 0">
+					and TENDERORGANIZIFORM in
+					<foreach collection="conditonMap.tenderOrganziFormList" item="item" open="("  separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				
+			</if>
+		</trim>
+	</sql>
+	<!-- 插入一条记录 -->
+	<insert id="insertTbTenderProject" parameterType="TbTenderProject">
+		<selectKey keyProperty="tenderProjectId" resultType="long" order="BEFORE">
+			SELECT seq_tenderprojectid.NEXTVAL AS id FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_TENDER_PROJECT (
+			<include refid="table_sql" />
+		)
+		VALUES (
+			#{tenderProjectId, jdbcType=NUMERIC},
+			#{projectId, jdbcType=NUMERIC},
+			#{tenderProjectNum, jdbcType=VARCHAR},
+			#{tenderProjectName, jdbcType=VARCHAR},
+			#{tenderContent, jdbcType=VARCHAR},
+			#{orgSuperviseDeptId, jdbcType=NUMERIC},
+			#{orgApproveDeptId, jdbcType=NUMERIC},
+			#{tenderId, jdbcType=NUMERIC},
+			#{tenderMode, jdbcType=NUMERIC},
+			#{tenderOrganziForm, jdbcType=NUMERIC},
+			#{contractFile, jdbcType=NUMERIC},
+			#{subMoney, jdbcType=NUMERIC},
+			#{subReckonPrice, jdbcType=NUMERIC},
+			#{currencyCode, jdbcType=VARCHAR},
+			#{priceUnit, jdbcType=VARCHAR},
+			#{tenderProjectType, jdbcType=VARCHAR},
+			#{status, jdbcType=NUMERIC},
+			#{createUser, jdbcType=NUMERIC},
+			#{createTime, jdbcType=TIMESTAMP},
+			#{updateUser, jdbcType=NUMERIC},
+			#{updateTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<select id="queryTbTenderProjectByPage" resultMap="TbTenderProject" parameterType="TbTenderProject">
+		SELECT * FROM (
+			SELECT 
+				T.* 
+				<if test="conditonMap != null and conditonMap.size() != 0 ">
+					<if test='conditonMap.querySubNumFlag != null and conditonMap.querySubNumFlag == "1"'>
+					,T1.subNum</if>
+					<if test='conditonMap.queryPushNoticeFlag != null and conditonMap.queryPushNoticeFlag == "1"'>
+					,T2.pushNoticeNum</if>
+					<if test='conditonMap.queryChangeNoticeFlag != null and conditonMap.queryChangeNoticeFlag == "1"'>
+					,T3.changeNoticeNum</if>
+					<if test='conditonMap.querySupplierFlag != null and conditonMap.querySupplierFlag == "1"'>
+					,T4.supplierNum</if>
+				</if>
+			FROM (
+				SELECT 
+					<include refid="table_sql" />
+				FROM TB_TENDER_PROJECT
+				<include refid="where_sql" />
+			) T
+			<if test='conditonMap.querySubNumFlag != null and conditonMap.querySubNumFlag == "1"'>
+				Left join (
+					SELECT TENDERPROJECTID, count(1) as subNum
+					FROM TB_SUB 
+					WHERE STATUS = 0 AND SORTNO = 0
+					GROUP BY TENDERPROJECTID
+				) T1
+				on T1.TENDERPROJECTID = T.TENDERPROJECTID
+			</if>
+			<if test='conditonMap.queryPushNoticeFlag != null and conditonMap.queryPushNoticeFlag == "1"'>
+				Left join (
+					SELECT TENDERPROJECTID, count(1) as pushNoticeNum
+					FROM TB_CONNECT_NOTICE 
+					WHERE STATUS = 0 AND NOTICETYPE = 1
+					GROUP BY TENDERPROJECTID
+				) T2
+				on T2.TENDERPROJECTID = T.TENDERPROJECTID
+			</if>
+			<if test='conditonMap.queryChangeNoticeFlag != null and conditonMap.queryChangeNoticeFlag == "1"'>
+				Left join (
+					SELECT TENDERPROJECTID, count(1) as changeNoticeNum
+					FROM TB_CONNECT_NOTICE 
+					WHERE STATUS = 0 AND NOTICETYPE = 2
+					GROUP BY TENDERPROJECTID
+				) T3
+				on T3.TENDERPROJECTID = T.TENDERPROJECTID
+			</if>
+			<if test='conditonMap.querySupplierFlag != null and conditonMap.querySupplierFlag == "1"'>
+				Left join (
+					SELECT TENDERPROJECTID, count(1) as supplierNum
+					FROM TB_STANDARD_SUPPLIER 
+					WHERE STATUS = 0
+					GROUP BY TENDERPROJECTID
+				) T4
+				on T4.TENDERPROJECTID = T.TENDERPROJECTID
+			</if>
+		) T2
+	</select>
+	
+</mapper>
+

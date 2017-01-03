@@ -1,0 +1,59 @@
+.tooltip {
+    position: absolute;
+    z-index: 999;
+    width: 2.2em;
+    height: 2.2em;
+    cursor: pointer;
+}
+
+/* Trigger item */
+
+.tooltip-item {
+    width: 30px;
+    height: 30px;
+
+}
+
+/* Tooltip */
+
+.tooltip-content {
+    position: absolute;
+    background: #ff8901;
+    z-index: 9999;
+    margin-bottom: -1em;
+    text-align: center;
+    color: #fff;
+    height:18px;
+    width:30px;
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    top:-5px;
+    right: 0px;
+    font-size: 12px;
+}
+
+.tooltip-content::before,
+.tooltip-content::after {
+    content: '';
+    position: absolute;
+}
+
+.tooltip-content::before {
+    height: 100%;
+}
+
+
+
+.tooltip-west .tooltip-content::before,
+.tooltip-west .tooltip-content::after {
+    right: 99%; /* because of FF, otherwise we have a gap */
+}
+
+.tooltip-east .tooltip-content::before,
+.tooltip-east .tooltip-content::after {
+    left: 25%; /* because of FF, otherwise we have a gap */
+}
+
+.tooltip-east .tooltip-content::after {
+    -webkit-transform: scale3d(-1,1,1);
+    transform: scale3d(-1,1,1);
+}
